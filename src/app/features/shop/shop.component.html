@@ -1,0 +1,163 @@
+<section>
+  
+  <div class="cosmic-gradient relative overflow-hidden text-white">
+    <div
+      class="pointer-events-none absolute -top-24 -end-24 h-72 w-72 rounded-full bg-white/10 blur-3xl"
+    ></div>
+    <div
+      class="pointer-events-none absolute -bottom-24 -start-24 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl"
+    ></div>
+
+    <div class="container relative mx-auto px-4 py-12 sm:py-16">
+      <nav class="mb-6 flex items-center gap-2 text-sm text-white/85" aria-label="Breadcrumb">
+        <a routerLink="/" class="transition hover:text-white">{{ 'common.home' | translate }}</a>
+        <i class="fa-solid fa-chevron-right text-[10px] rtl:rotate-180"></i>
+        <span class="font-semibold text-white">{{ 'common.shop' | translate }}</span>
+      </nav>
+
+      <div class="flex items-center gap-5">
+        <div
+          class="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-3xl shadow-xl ring-1 ring-white/30 backdrop-blur-sm"
+        >
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{{ 'shop.allProducts' | translate }}</h1>
+          <p class="mt-1 text-white/85">{{ 'shop.explore' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-10">
+    
+    @if (subcategoryId()) {
+      <div class="mb-8 flex flex-wrap items-center gap-3">
+        <span class="flex items-center gap-2 text-sm font-semibold text-muted">
+          <i class="fa-solid fa-filter"></i>{{ 'shop.activeFilters' | translate }}
+        </span>
+
+        <span
+          class="flex items-center gap-2 rounded-full bg-brand/10 py-1.5 ps-3.5 pe-2 text-sm font-semibold text-brand-700 dark:text-brand-300"
+        >
+          {{ activeSubcategory()?.name ?? '...' }}
+          <button
+            type="button"
+            (click)="clearFilters()"
+            [attr.aria-label]="'common.removeFilter' | translate"
+            class="flex size-5 items-center justify-center rounded-full transition hover:bg-brand/20"
+          >
+            <i class="fa-solid fa-xmark text-xs"></i>
+          </button>
+        </span>
+
+        <button
+          type="button"
+          (click)="clearFilters()"
+          class="text-sm font-medium text-muted underline transition hover:text-brand"
+        >
+          {{ 'shop.clearAll' | translate }}
+        </button>
+      </div>
+    }
+
+    
+    @if (isLoading()) {
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4" aria-busy="true">
+        @for (i of skeletons; track i) {
+          <div class="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div class="h-60 animate-pulse bg-border/60"></div>
+            <div class="space-y-3 p-4">
+              <div class="h-4 w-1/3 animate-pulse rounded-full bg-border/60"></div>
+              <div class="h-4 w-4/5 animate-pulse rounded-full bg-border/60"></div>
+              <div class="h-8 w-1/2 animate-pulse rounded-full bg-border/60"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    
+    @else if (errorMessage()) {
+      <div
+        role="alert"
+        class="flex items-start gap-3 rounded-xl border border-rose-700/40 bg-rose-700/10 p-4 text-sm text-rose-800 dark:border-rose-400/40 dark:bg-rose-500/15 dark:text-rose-200"
+      >
+        <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+        <p>{{ errorMessage() }}</p>
+      </div>
+    }
+
+    
+    @else if (products().length) {
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+        @for (p of products(); track p._id) {
+          <app-product-card [product]="p" />
+        }
+      </div>
+
+      
+      @if (totalPages() > 1) {
+        <nav class="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+          <button
+            type="button"
+            (click)="goToPage(page() - 1)"
+            [disabled]="page() === 1"
+            [attr.aria-label]="'common.previousPage' | translate"
+            class="flex size-10 items-center justify-center rounded-xl border border-border text-text transition hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <i class="fa-solid fa-chevron-left text-xs rtl:rotate-180"></i>
+          </button>
+
+          @for (n of pages(); track n) {
+            <button
+              type="button"
+              (click)="goToPage(n)"
+              [attr.aria-current]="n === page() ? 'page' : null"
+              [class]="
+                n === page()
+                  ? 'cosmic-gradient border-transparent text-white shadow-lg shadow-brand/25'
+                  : 'border-border text-text hover:border-brand hover:text-brand'
+              "
+              class="size-10 rounded-xl border font-semibold transition"
+            >
+              {{ n }}
+            </button>
+          }
+
+          <button
+            type="button"
+            (click)="goToPage(page() + 1)"
+            [disabled]="page() === totalPages()"
+            [attr.aria-label]="'common.nextPage' | translate"
+            class="flex size-10 items-center justify-center rounded-xl border border-border text-text transition hover:border-brand hover:text-brand disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <i class="fa-solid fa-chevron-right text-xs rtl:rotate-180"></i>
+          </button>
+        </nav>
+      }
+    }
+
+    
+    @else {
+      <div class="rounded-2xl border border-border bg-surface p-10 text-center">
+        <div
+          class="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-brand/10 text-2xl text-brand"
+        >
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+        <h2 class="mb-1 text-lg font-bold text-text">{{ 'shop.noProducts' | translate }}</h2>
+        <p class="mb-5 text-muted">{{ 'shop.tryAnother' | translate }}</p>
+        @if (subcategoryId()) {
+          <button
+            type="button"
+            (click)="clearFilters()"
+            class="cosmic-gradient inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold text-white shadow-lg shadow-brand/25 transition hover:brightness-110"
+          >
+            {{ 'shop.clearFilters' | translate }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+</section>

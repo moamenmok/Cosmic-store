@@ -1,0 +1,565 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
+  <div class="container mx-auto max-w-6xl px-4">
+    <nav class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <a routerLink="/" class="hover:text-brand transition">{{ 'common.home' | translate }}</a>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      <a routerLink="/cart" class="hover:text-brand transition">{{ 'common.cart' | translate }}</a>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      <span class="text-gray-900 dark:text-white font-medium">{{
+        'common.checkout' | translate
+      }}</span>
+    </nav>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-3">
+          <div
+            class="size-11 rounded-xl bg-brand text-white flex items-center justify-center shadow-lg shadow-brand/20"
+          >
+            <i class="fa-solid fa-receipt text-lg"></i>
+          </div>
+
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            {{ 'checkout.completeOrder' | translate }}
+          </h1>
+        </div>
+
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+          {{ 'checkout.review' | translate }}
+        </p>
+      </div>
+
+      <a
+        routerLink="/cart"
+        class="flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-600 transition"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+        {{ 'checkout.backToCart' | translate }}
+      </a>
+    </div>
+
+    <form
+      [formGroup]="checkoutForm"
+      (ngSubmit)="placeOrder()"
+      class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+    >
+      <div class="lg:col-span-8 space-y-6">
+        <section class="rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="bg-gradient-to-r from-brand to-brand-700 px-5 py-4 text-white rounded-t-2xl">
+            <div class="flex items-center gap-2 font-bold">
+              <i class="fa-solid fa-house"></i>
+              <h2>{{ 'checkout.shippingAddress' | translate }}</h2>
+            </div>
+
+            <p class="text-xs text-white/80 mt-1">{{ 'checkout.deliverWhere' | translate }}</p>
+          </div>
+
+          <div class="p-4 sm:p-5 space-y-5">
+            <div>
+              <div class="flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-bookmark text-brand"></i>
+
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ 'checkout.savedAddresses' | translate }}
+                </h3>
+              </div>
+
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                {{ 'checkout.selectAddress' | translate }}
+              </p>
+
+              @if (isLoadingAddresses()) {
+                @for (item of [1, 2]; track item) {
+                  <div
+                    class="mb-3 h-28 animate-pulse rounded-xl border border-border bg-border/40"
+                    aria-busy="true"
+                  ></div>
+                }
+              } @else {
+                @for (address of addressesList(); track address._id) {
+                  <label
+                    class="flex items-start gap-3 p-4 mb-3 rounded-xl border-2 cursor-pointer transition"
+                    [class.border-brand]="selectedAddressId() === address._id"
+                    [class.bg-brand-50]="selectedAddressId() === address._id"
+                    [class.border-border]="selectedAddressId() !== address._id"
+                    [class.hover:border-brand]="selectedAddressId() !== address._id"
+                  >
+                    <input
+                      type="radio"
+                      name="address"
+                      [checked]="selectedAddressId() === address._id"
+                      (change)="selectSavedAddress(address)"
+                      class="mt-1 size-4 accent-brand"
+                    />
+
+                    <div
+                      class="size-10 shrink-0 rounded-lg bg-brand/10 text-brand flex items-center justify-center"
+                    >
+                      <i class="fa-solid fa-location-dot"></i>
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-semibold text-gray-900 dark:text-white">
+                        {{ address.city }}
+                      </h4>
+
+                      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {{ address.details }}
+                      </p>
+
+                      <div
+                        class="flex flex-wrap items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400"
+                      >
+                        <span class="flex items-center gap-1">
+                          <i class="fa-solid fa-phone"></i>
+                          {{ address.phone }}
+                        </span>
+
+                        <span class="flex items-center gap-1">
+                          <i class="fa-solid fa-envelope"></i>
+                          {{ address.postalCode }}
+                        </span>
+                      </div>
+                    </div>
+
+                    @if (selectedAddressId() === address._id) {
+                      <i class="fa-solid fa-circle-check text-brand"></i>
+                    }
+                  </label>
+                } @empty {
+                  <div class="p-5 text-center rounded-xl border border-dashed border-border">
+                    <i class="fa-solid fa-location-dot text-2xl text-gray-400"></i>
+
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                      {{ 'checkout.noSavedAddresses' | translate }}
+                    </p>
+                  </div>
+                }
+              }
+
+              <label
+                class="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed cursor-pointer transition"
+                [class.border-brand]="selectedAddressId() === null"
+                [class.bg-brand/5]="selectedAddressId() === null"
+                [class.border-border]="selectedAddressId() !== null"
+                [class.hover:border-brand]="selectedAddressId() !== null"
+              >
+                <input
+                  type="radio"
+                  name="address"
+                  [checked]="selectedAddressId() === null"
+                  (change)="useNewAddress()"
+                  class="size-4 accent-brand"
+                />
+
+                <div
+                  class="size-10 shrink-0 rounded-xl bg-brand text-white flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-semibold text-brand">
+                    {{ 'checkout.newAddress' | translate }}
+                  </h4>
+
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {{ 'checkout.enterAddress' | translate }}
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <div
+              class="flex items-start gap-3 p-4 rounded-xl border border-brand/15 bg-brand/5 dark:bg-brand/10"
+            >
+              <div
+                class="size-9 shrink-0 rounded-full bg-brand/10 text-brand flex items-center justify-center"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+              </div>
+
+              <div>
+                <h4 class="text-sm font-semibold text-brand">
+                  {{ 'checkout.deliveryInfo' | translate }}
+                </h4>
+
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {{ 'checkout.accurateAddress' | translate }}
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {{ 'checkout.city' | translate }} <span class="text-red-500">*</span>
+                </label>
+
+                <div class="relative">
+                  <i
+                    class="fa-solid fa-city absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  ></i>
+
+                  <input
+                    type="text"
+                    formControlName="city"
+                    [placeholder]="'checkout.citiesExample' | translate"
+                    class="w-full h-12 pl-12 pr-4 rounded-xl border border-border bg-surface text-gray-900 dark:text-white text-sm placeholder:text-gray-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+                    [class.border-red-500]="
+                      checkoutForm.controls.city.touched && checkoutForm.controls.city.invalid
+                    "
+                  />
+                </div>
+
+                @if (checkoutForm.controls.city.touched && checkoutForm.controls.city.invalid) {
+                  <p class="text-xs text-red-500 mt-1">{{ 'checkout.requiredCity' | translate }}</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {{ 'checkout.streetAddress' | translate }} <span class="text-red-500">*</span>
+                </label>
+
+                <div class="relative">
+                  <i class="fa-solid fa-location-dot absolute left-4 top-5 text-gray-400"></i>
+
+                  <textarea
+                    rows="3"
+                    formControlName="details"
+                    [placeholder]="'checkout.streetPlaceholder' | translate"
+                    class="w-full pl-12 pr-4 py-4 rounded-xl border border-border bg-surface text-gray-900 dark:text-white text-sm placeholder:text-gray-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 resize-none transition"
+                    [class.border-red-500]="
+                      checkoutForm.controls.details.touched && checkoutForm.controls.details.invalid
+                    "
+                  ></textarea>
+                </div>
+
+                @if (
+                  checkoutForm.controls.details.touched && checkoutForm.controls.details.invalid
+                ) {
+                  <p class="text-xs text-red-500 mt-1">
+                    {{ 'checkout.requiredAddress' | translate }}
+                  </p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {{ 'checkout.postalCode' | translate }} <span class="text-red-500">*</span>
+                </label>
+
+                <div class="relative">
+                  <i
+                    class="fa-solid fa-envelopes-bulk absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  ></i>
+
+                  <input
+                    type="text"
+                    formControlName="postalCode"
+                    [placeholder]="'checkout.postalPlaceholder' | translate"
+                    class="w-full h-12 pl-12 pr-4 rounded-xl border border-border bg-surface text-gray-900 dark:text-white text-sm placeholder:text-gray-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+                    [class.border-red-500]="
+                      checkoutForm.controls.postalCode.touched &&
+                      checkoutForm.controls.postalCode.invalid
+                    "
+                  />
+                </div>
+
+                @if (
+                  checkoutForm.controls.postalCode.touched &&
+                  checkoutForm.controls.postalCode.invalid
+                ) {
+                  <p class="text-xs text-red-500 mt-1">
+                    {{ 'checkout.requiredPostal' | translate }}
+                  </p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {{ 'checkout.phone' | translate }} <span class="text-red-500">*</span>
+                </label>
+
+                <div class="relative">
+                  <i
+                    class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  ></i>
+
+                  <input
+                    type="tel"
+                    formControlName="phone"
+                    [placeholder]="'checkout.phonePlaceholder' | translate"
+                    class="w-full h-12 pl-12 pr-32 rounded-xl border border-border bg-surface text-gray-900 dark:text-white text-sm placeholder:text-gray-400 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
+                    [class.border-red-500]="
+                      checkoutForm.controls.phone.touched && checkoutForm.controls.phone.invalid
+                    "
+                  />
+
+                  <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] text-gray-400">
+                    {{ 'checkout.egyptNumbers' | translate }}
+                  </span>
+                </div>
+
+                @if (checkoutForm.controls.phone.touched && checkoutForm.controls.phone.invalid) {
+                  <p class="text-xs text-red-500 mt-1">
+                    @if (checkoutForm.controls.phone.hasError('required')) {
+                      {{ 'checkout.requiredPhone' | translate }}
+                    } @else {
+                      {{ 'checkout.invalidPhone' | translate }}
+                    }
+                  </p>
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+          <div
+            class="flex items-center gap-3 bg-gradient-to-r from-brand to-brand-700 px-5 py-4 text-white"
+          >
+            <div class="flex size-10 items-center justify-center rounded-xl bg-white/15">
+              <i class="fa-solid fa-wallet text-lg"></i>
+            </div>
+
+            <div>
+              <h2 class="font-bold">{{ 'checkout.paymentMethod' | translate }}</h2>
+              <p class="mt-0.5 text-xs text-white/80">{{ 'checkout.choosePayment' | translate }}</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 p-4 sm:p-5">
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-200"
+              [class.border-brand]="paymentMethod() === 'cash'"
+              [class.border-border]="paymentMethod() !== 'cash'"
+              [class.bg-brand-50]="paymentMethod() === 'cash'"
+              [class.dark:bg-brand-950]="paymentMethod() === 'cash'"
+              [class.hover:border-brand/50]="paymentMethod() !== 'cash'"
+            >
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                [checked]="paymentMethod() === 'cash'"
+                (change)="paymentMethod.set('cash')"
+                class="size-4 shrink-0 accent-brand"
+              />
+
+              <div
+                class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand text-white shadow-md shadow-brand/20"
+              >
+                <i class="fa-solid fa-money-bill-wave text-lg"></i>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">
+                  {{ 'checkout.cashDelivery' | translate }}
+                </h3>
+                <p class="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  {{ 'checkout.payOnArrival' | translate }}
+                </p>
+              </div>
+
+              @if (paymentMethod() === 'cash') {
+                <i class="fa-solid fa-circle-check shrink-0 text-xl text-brand"></i>
+              } @else {
+                <span
+                  class="size-5 shrink-0 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                ></span>
+              }
+            </label>
+
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-200"
+              [class.border-brand]="paymentMethod() === 'visa'"
+              [class.border-border]="paymentMethod() !== 'visa'"
+              [class.bg-brand-50]="paymentMethod() === 'visa'"
+              [class.dark:bg-brand-950]="paymentMethod() === 'visa'"
+              [class.hover:border-brand/50]="paymentMethod() !== 'visa'"
+            >
+              <input
+                type="radio"
+                name="payment"
+                value="visa"
+                [checked]="paymentMethod() === 'visa'"
+                (change)="paymentMethod.set('visa')"
+                class="size-4 shrink-0 accent-brand"
+              />
+
+              <div
+                class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand"
+              >
+                <i class="fa-solid fa-credit-card text-lg"></i>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">
+                  {{ 'checkout.payOnline' | translate }}
+                </h3>
+                <p class="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  {{ 'checkout.securePayment' | translate }}
+                </p>
+
+                <div class="mt-2 flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                  <i class="fa-brands fa-cc-visa text-xl"></i>
+                  <i class="fa-brands fa-cc-mastercard text-xl"></i>
+                  <i class="fa-brands fa-cc-amex text-xl"></i>
+                </div>
+              </div>
+
+              @if (paymentMethod() === 'visa') {
+                <i class="fa-solid fa-circle-check shrink-0 text-xl text-brand"></i>
+              } @else {
+                <span
+                  class="size-5 shrink-0 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                ></span>
+              }
+            </label>
+
+            <div
+              class="flex items-start gap-3 rounded-xl border border-brand/15 bg-brand/5 p-3.5 dark:bg-brand/10"
+            >
+              <div
+                class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+              >
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ 'checkout.secureCheckout' | translate }}
+                </h4>
+                <p class="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  Your payment is processed securely. We never store your card details.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="lg:col-span-4 lg:sticky lg:top-24">
+        <section class="rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="bg-gradient-to-r from-brand to-brand-700 px-5 py-4 text-white rounded-t-2xl">
+            <div class="flex items-center gap-2 font-bold">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <h2>{{ 'cart.summary' | translate }}</h2>
+            </div>
+
+            <p class="text-xs text-white/80 mt-1">{{ cartData().products.length }} items</p>
+          </div>
+
+          <div class="p-4 space-y-4">
+            <div class="space-y-3">
+              @if (isLoadingCart()) {
+                @for (item of [1, 2, 3]; track item) {
+                  <div
+                    class="h-16 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800"
+                    aria-busy="true"
+                  ></div>
+                }
+              } @else {
+                @for (product of cartData().products; track product._id) {
+                  <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800">
+                    <div
+                      class="size-12 shrink-0 rounded-lg bg-white dark:bg-gray-700 flex items-center justify-center"
+                    >
+                      <img
+                        [src]="product.product.imageCover"
+                        [alt]="product.product.title"
+                        class="w-full h-full object-contain rounded-lg"
+                      />
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ product.product.title }}
+                      </h3>
+
+                      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {{ product.count }} × {{ product.price }} EGP
+                      </p>
+                    </div>
+
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">
+                      {{ product.count * product.price }}
+                    </span>
+                  </div>
+                }
+              }
+            </div>
+
+            <div class="border-t border-border"></div>
+
+            <div class="space-y-3">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500 dark:text-gray-400">{{
+                  'cart.subtotal' | translate
+                }}</span>
+
+                <span class="font-medium text-gray-700 dark:text-gray-200">
+                  {{ cartPrice() }} EGP
+                </span>
+              </div>
+
+              <div class="flex justify-between items-center text-sm">
+                <span class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                  <i class="fa-solid fa-truck"></i>
+                  {{ 'cart.shipping' | translate }}
+                </span>
+
+                <span class="font-semibold text-brand">{{ 'checkout.free' | translate }}</span>
+              </div>
+
+              <div class="border-t border-border pt-3 flex items-center justify-between">
+                <span class="font-bold text-gray-900 dark:text-white">{{
+                  'cart.total' | translate
+                }}</span>
+
+                <div class="flex items-baseline gap-1">
+                  <span class="text-2xl font-bold text-brand"> {{ cartPrice() }} </span>
+
+                  <span class="text-xs text-gray-500"> EGP </span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand to-brand-700 hover:from-brand-600 hover:to-brand-800 text-white font-bold text-sm shadow-lg shadow-brand/20 transition duration-300 hover:-translate-y-0.5"
+            >
+              <i class="fa-solid fa-lock"></i>
+              {{ 'checkout.placeOrder' | translate }}
+            </button>
+
+            <div
+              class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 pt-3 border-t border-border"
+            >
+              <span class="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                <i class="fa-solid fa-shield-halved text-brand"></i>
+                {{ 'checkout.secureCheckout' | translate }}
+              </span>
+
+              <span class="text-gray-300 dark:text-gray-700">|</span>
+
+              <span class="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                <i class="fa-solid fa-truck-fast text-brand"></i>
+                {{ 'checkout.fastDelivery' | translate }}
+              </span>
+
+              <span class="text-gray-300 dark:text-gray-700">|</span>
+
+              <span class="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                <i class="fa-solid fa-rotate-left text-brand"></i>
+                {{ 'checkout.easyReturns' | translate }}
+              </span>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </form>
+  </div>
+</div>

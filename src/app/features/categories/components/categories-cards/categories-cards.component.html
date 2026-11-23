@@ -1,0 +1,41 @@
+@if (isLoading()) {
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5" aria-busy="true">
+    @for (i of skeletons; track i) {
+      <div class="rounded-2xl border border-border bg-surface p-4 text-center">
+        <div class="mx-auto mb-3 size-20 animate-pulse rounded-full bg-border/60"></div>
+        <div class="mx-auto h-4 w-3/4 animate-pulse rounded-full bg-border/60"></div>
+      </div>
+    }
+  </div>
+} @else if (categoriesList().length) {
+<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5">
+  @for (category of categoriesList(); track category._id) {
+    <a
+      [routerLink]="['/categories', category._id]"
+      class="group rounded-2xl border border-border bg-surface p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10 focus-visible:ring-2 focus-visible:ring-brand"
+    >
+      <div
+        class="cosmic-gradient mx-auto mb-3 h-20 w-20 rounded-full p-0.5 opacity-80 transition group-hover:opacity-100 group-hover:shadow-lg group-hover:shadow-brand/30"
+      >
+        <div class="h-full w-full overflow-hidden rounded-full bg-surface">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+            class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+          />
+        </div>
+      </div>
+
+      <h3 class="text-sm font-semibold text-text transition group-hover:text-brand">
+        {{ category.name }}
+      </h3>
+    </a>
+  }
+</div>
+} @else {
+  <p class="rounded-2xl border border-border bg-surface p-8 text-center text-muted">{{ 'empty.categories' | translate }}</p>
+}

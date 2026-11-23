@@ -1,0 +1,67 @@
+<section class="relative flex min-h-[calc(100vh-5rem)] items-center overflow-hidden px-4 py-16">
+  <div
+    class="pointer-events-none absolute -top-24 start-1/4 h-80 w-80 rounded-full bg-violet-500/20 blur-3xl"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-24 end-1/4 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl"
+  ></div>
+
+  <div class="relative mx-auto w-full max-w-2xl text-center">
+    <div class="relative mx-auto mb-10 flex size-56 items-center justify-center sm:size-72">
+      <div
+        class="absolute inset-0 animate-[spin_16s_linear_infinite] rounded-full border-2 border-dashed border-brand/40 motion-reduce:animate-none"
+      >
+        <span
+          class="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/60"
+        ></span>
+      </div>
+      <div class="absolute inset-6 rounded-full border border-border sm:inset-8"></div>
+      <span class="text-cosmic-gradient text-7xl font-black sm:text-8xl">404</span>
+    </div>
+
+    <h1 class="mb-3 text-3xl font-extrabold text-text sm:text-4xl">{{ 'notFound.title' | translate }}</h1>
+    <p class="mx-auto mb-8 max-w-md text-lg text-muted">
+      {{ 'notFound.description' | translate }}
+    </p>
+
+    <div class="mb-10 flex flex-col justify-center gap-3 sm:flex-row">
+      <a
+        routerLink="/"
+        class="cosmic-gradient inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 transition hover:brightness-110 active:scale-[0.98]"
+      >
+        <i class="fa-solid fa-house"></i>{{ 'notFound.backHome' | translate }}
+      </a>
+      <a
+        routerLink="/shop"
+        class="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand px-8 py-3.5 font-semibold text-brand-700 transition hover:bg-brand/10 dark:text-brand-300"
+      >
+        <i class="fa-solid fa-bag-shopping"></i>{{ 'notFound.browseShop' | translate }}
+      </a>
+    </div>
+
+    
+    <div class="border-t border-border pt-6">
+      <p class="mb-3 text-sm font-medium text-muted">{{ 'notFound.tryLinks' | translate }}</p>
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <a
+          routerLink="/categories"
+          class="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition hover:border-brand hover:text-brand"
+        >
+          <i class="fa-solid fa-layer-group me-1.5 text-brand"></i>{{ 'common.categories' | translate }}
+        </a>
+        <a
+          routerLink="/brands"
+          class="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition hover:border-brand hover:text-brand"
+        >
+          <i class="fa-solid fa-tags me-1.5 text-brand"></i>{{ 'common.brands' | translate }}
+        </a>
+        <a
+          routerLink="/cart"
+          class="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition hover:border-brand hover:text-brand"
+        >
+          <i class="fa-solid fa-cart-shopping me-1.5 text-brand"></i>{{ 'common.cart' | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

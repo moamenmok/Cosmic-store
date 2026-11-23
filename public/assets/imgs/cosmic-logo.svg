@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360">
+<g transform="translate(0 20) scale(.78)">
+<defs>
+ <linearGradient id="bag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a855f7"/><stop offset=".52" stop-color="#4f46e5"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+ <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a855f7"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+</defs>
+
+<path d="M45 225 C85 120 278 48 340 105 C390 152 260 260 100 278 C62 282 35 266 45 225Z" fill="none" stroke="url(#orbit)" stroke-width="18" stroke-linecap="round"/>
+
+<path d="M110 105 Q110 87 130 87 H265 Q285 87 288 108 L310 240 Q313 262 290 267 H102 Q80 267 84 244Z" fill="url(#bag)"/>
+
+<path d="M150 105 V65 C150 28 185 15 213 15 C242 15 265 36 265 65 V105" fill="none" stroke="url(#orbit)" stroke-width="19" stroke-linecap="round"/>
+
+<path d="M145 150 H175 L194 205 H250 L270 165 H185" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="205" cy="228" r="12" fill="#fff"/><circle cx="250" cy="228" r="12" fill="#fff"/>
+<path d="M318 30 l8 18 18 8-18 8-8 18-8-18-18-8 18-8Z" fill="#fff"/>
+</g>
+<text x="330" y="180" font-family="Arial,sans-serif" font-size="130" font-weight="600" letter-spacing="4" fill="#f8fafc">COSMIC</text>
+<text x="390" y="245" font-family="Arial,sans-serif" font-size="30" letter-spacing="12" fill="#a78bfa">ONLINE STORE</text>
+</svg>

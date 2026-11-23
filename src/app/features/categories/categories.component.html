@@ -1,0 +1,34 @@
+<section>
+  
+  <div class="cosmic-gradient relative overflow-hidden text-white">
+    <div
+      class="pointer-events-none absolute -top-24 -end-24 h-72 w-72 rounded-full bg-white/10 blur-3xl"
+    ></div>
+    <div
+      class="pointer-events-none absolute -bottom-24 -start-24 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl"
+    ></div>
+
+    <div class="container relative mx-auto px-4 py-12 sm:py-16">
+      <nav class="mb-6 flex items-center gap-2 text-sm text-white/85" aria-label="Breadcrumb">
+        <a routerLink="/" class="transition hover:text-white">{{ 'common.home' | translate }}</a>
+        <i class="fa-solid fa-chevron-right text-[10px] rtl:rotate-180"></i>
+        <span class="font-semibold text-white">{{ 'common.categories' | translate }}</span>
+      </nav>
+
+      <div class="flex items-center gap-5">
+        <div
+          class="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-3xl shadow-xl ring-1 ring-white/30 backdrop-blur-sm"
+        >
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{{ 'category.title' | translate }}</h1>
+          <p class="mt-1 text-white/85">{{ 'category.browse' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="container mx-auto px-4 py-10"><app-categories-cards></app-categories-cards></div>
+</section>

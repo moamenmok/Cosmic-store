@@ -1,0 +1,200 @@
+<div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <nav class="mb-8 flex items-center gap-2 text-sm text-muted">
+    <a href="/" class="transition hover:text-brand">{{ 'common.home' | translate }}</a>
+    <i class="fa-solid fa-chevron-right text-xs"></i>
+    <span class="font-medium text-text">{{ 'wishlist.title' | translate }}</span>
+  </nav>
+
+  <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
+        <i class="fa-solid fa-heart text-2xl"></i>
+      </div>
+
+      <div>
+        <h1 class="text-2xl font-bold text-text sm:text-3xl">{{ 'wishlist.title' | translate }}</h1>
+        <p class="mt-1 text-sm text-muted">
+          {{ wishlistData().length }} {{ 'wishlist.itemsSaved' | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="space-y-3 rounded-2xl border border-border bg-surface p-5" aria-busy="true">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="flex items-center gap-4 border-b border-border py-4 last:border-0">
+          <div class="size-20 animate-pulse rounded-xl bg-border/60"></div>
+          <div class="flex-1 space-y-3">
+            <div class="h-4 w-2/3 animate-pulse rounded-full bg-border/60"></div>
+            <div class="h-3 w-1/3 animate-pulse rounded-full bg-border/60"></div>
+          </div>
+          <div class="h-9 w-24 animate-pulse rounded-xl bg-border/60"></div>
+        </div>
+      }
+    </div>
+  } @else if (wishlistData().length) {
+    <div class="overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
+      <table class="w-full border-collapse text-left">
+        <thead class="border-b border-border bg-surface-hover text-sm font-semibold text-muted">
+          <tr>
+            <th scope="col" class="px-6 py-4">{{ 'wishlist.product' | translate }}</th>
+            <th scope="col" class="px-6 py-4">{{ 'wishlist.price' | translate }}</th>
+            <th scope="col" class="px-6 py-4">{{ 'wishlist.status' | translate }}</th>
+            <th scope="col" class="px-6 py-4 text-center">{{ 'wishlist.actions' | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-border">
+          @for (row of wishlistData(); track row._id) {
+            <tr class="transition hover:bg-brand/5">
+              <td class="px-6 py-5">
+                <div class="flex items-center gap-4 min-w-[240px]">
+                  <div class="flex w-20 shrink-0 items-center justify-center rounded-xl bg-brand/5">
+                    <img
+                      [src]="row.imageCover"
+                      [alt]="row.title"
+                      class="block size-20 rounded-xl object-cover object-center"
+                    />
+                  </div>
+                  <div class="min-w-0">
+                    <h3 class="line-clamp-2 font-semibold text-text">
+                      {{ row.title }}
+                    </h3>
+                    <p class="mt-1 text-sm text-muted">{{ row.category.name }}</p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="whitespace-nowrap px-6 py-5">
+                <span class="font-bold text-text">{{ row.price }} EGP</span>
+              </td>
+
+              <td class="whitespace-nowrap px-6 py-5">
+                <span
+                  class="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-600"
+                >
+                  <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                  {{ 'wishlist.inStock' | translate }}
+                </span>
+              </td>
+
+              <td class="whitespace-nowrap px-6 py-5">
+                <div class="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    (click)="addToCart(row._id)"
+                    [disabled]="addingToCartId() !== null"
+                    class="flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    @if (addingToCartId() === row._id) {
+                      <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    } @else {
+                      <i class="fa-solid fa-cart-shopping"></i>
+                    }
+                    {{ 'wishlist.addToCart' | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="confirmRemoveFromWishlist(row._id)"
+                    aria-label="Remove from wishlist"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-muted transition hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-500"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-6 py-12 text-center text-muted">
+                {{ 'empty.wishlist' | translate }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div class="rounded-2xl border border-dashed border-border bg-surface px-5 py-14 text-center">
+      <span
+        class="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-brand/10 text-2xl text-brand"
+      >
+        <i class="fa-regular fa-heart"></i>
+      </span>
+      <h2 class="text-lg font-bold text-text">{{ 'empty.wishlist' | translate }}</h2>
+      <p class="mt-2 text-sm text-muted">{{ 'empty.wishlistHint' | translate }}</p>
+    </div>
+  }
+
+  <div class="mt-6">
+    <a
+      href="/shop"
+      class="inline-flex items-center gap-2 font-semibold text-brand transition hover:gap-3"
+    >
+      <i class="fa-solid fa-arrow-left"></i>
+      {{ 'common.continueShopping' | translate }}
+    </a>
+  </div>
+</div>
+
+<div
+  #deleteModal
+  id="wishlist-delete-modal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="fixed inset-0 z-50 hidden items-center justify-center overflow-y-auto overflow-x-hidden bg-slate-950/70 p-4 backdrop-blur-md"
+>
+  <div class="w-full max-w-sm">
+    <div
+      class="relative rounded-3xl border border-border bg-surface p-6 text-center shadow-2xl shadow-brand/20"
+    >
+      <!-- Close button -->
+      <button
+        type="button"
+        (click)="closeDeleteModal()"
+        aria-label="Close"
+        class="absolute right-4 top-4 flex size-8 items-center justify-center rounded-full text-muted transition hover:bg-brand/10 hover:text-brand"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Icon with soft glow rings -->
+      <div
+        class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-brand/10 ring-8 ring-brand/5"
+      >
+        <span
+          class="flex size-14 items-center justify-center rounded-full bg-brand text-2xl text-white shadow-lg shadow-brand/40"
+        >
+          <i class="fa-solid fa-heart-crack"></i>
+        </span>
+      </div>
+
+      <h2 class="text-xl font-bold text-foreground">
+        {{ 'confirm.removeWishlistTitle' | translate }}
+      </h2>
+
+      <p class="mt-2 text-sm leading-6 text-muted">
+        {{ 'confirm.removeWishlist' | translate }}
+      </p>
+
+      <!-- Actions -->
+      <div class="mt-7 grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          (click)="closeDeleteModal()"
+          class="rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-brand/10 active:scale-95"
+        >
+          {{ 'confirm.keep' | translate }}
+        </button>
+        <button
+          type="button"
+          (click)="applyDelete()"
+          class="rounded-xl bg-brand px-4 py-3 text-sm font-bold text-white shadow-lg shadow-brand/30 transition hover:bg-brand/90 active:scale-95"
+        >
+          {{ 'confirm.remove' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

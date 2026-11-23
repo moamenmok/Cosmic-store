@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+<defs>
+ <linearGradient id="bag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".52" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+ <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+</defs>
+
+<path d="M45 225 C85 120 278 48 340 105 C390 152 260 260 100 278 C62 282 35 266 45 225Z" fill="none" stroke="url(#orbit)" stroke-width="18" stroke-linecap="round"/>
+
+<path d="M110 105 Q110 87 130 87 H265 Q285 87 288 108 L310 240 Q313 262 290 267 H102 Q80 267 84 244Z" fill="#ffffff"/>
+
+<path d="M150 105 V65 C150 28 185 15 213 15 C242 15 265 36 265 65 V105" fill="none" stroke="url(#orbit)" stroke-width="19" stroke-linecap="round"/>
+
+<path d="M145 150 H175 L194 205 H250 L270 165 H185" fill="none" stroke="#090b1a" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="205" cy="228" r="12" fill="#090b1a"/><circle cx="250" cy="228" r="12" fill="#090b1a"/>
+<path d="M318 30 l8 18 18 8-18 8-8 18-8-18-18-8 18-8Z" fill="#090b1a"/>
+</svg>

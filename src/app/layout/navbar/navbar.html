@@ -1,0 +1,447 @@
+<div class="container mx-auto px-4">
+  <div class="flex h-16 items-center justify-between gap-4 lg:h-20">
+    
+    <a routerLink="/" class="flex shrink-0 items-center gap-2">
+      @if (themeService.theme() === 'dark') {
+        <img
+          src="assets/imgs/cosmic-logo-dark.svg"
+          alt="COSMIC"
+          class="size-32 object-contain sm:size-40"
+        />
+      } @else {
+        <img
+          src="assets/imgs/cosmic-logo-light.svg"
+          alt="COSMIC"
+          class="size-32 object-contain sm:size-40"
+        />
+      }
+    </a>
+
+    
+    <form class="hidden max-w-xl flex-1 lg:flex">
+      <div class="relative w-full">
+        <input
+          type="search"
+          [placeholder]="'common.search' | translate"
+          class="w-full rounded-full border border-border bg-background py-3 pl-5 pr-12 text-sm text-text outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+        />
+
+        <button
+          type="submit"
+        [attr.aria-label]="'common.search' | translate"
+          class="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full cosmic-gradient text-white transition hover:scale-105"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </form>
+
+    
+    <nav class="hidden items-center gap-6 xl:flex">
+      <a routerLink="/" routerLinkActive="!text-brand" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" class="text-sm font-semibold text-text transition hover:text-brand">
+        {{ 'common.home' | translate }}
+      </a>
+
+      <a routerLink="/shop" routerLinkActive="!text-brand" ariaCurrentWhenActive="page" class="text-sm font-semibold text-muted transition hover:text-brand">
+        {{ 'common.shop' | translate }}
+      </a>
+
+      <div class="group relative">
+        <button
+          type="button"
+          class="flex items-center gap-2 py-3 text-sm font-semibold text-muted transition hover:text-brand"
+        >
+          {{ 'common.categories' | translate }}
+          <i class="fa-solid fa-chevron-down text-[10px] transition group-hover:rotate-180"></i>
+        </button>
+
+        <div
+          class="invisible absolute left-0 top-full w-52 translate-y-2 rounded-xl border border-border bg-surface p-2 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          <a
+            routerLink="/categories"
+            routerLinkActive="!bg-brand/10 !text-brand"
+            ariaCurrentWhenActive="page"
+            class="block rounded-lg px-3 py-2.5 text-sm text-text transition hover:bg-brand/10 hover:text-brand"
+          >
+            {{ 'common.allCategories' | translate }}
+          </a>
+          <a
+            routerLink="/categories/6439d2d167d9aa4ca970649f"
+            routerLinkActive="!bg-brand/10 !text-brand"
+            ariaCurrentWhenActive="page"
+            class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+          >
+            {{ 'common.electronics' | translate }}
+          </a>
+          <a
+            routerLink="/categories/6439d5b90049ad0b52b90048"
+            routerLinkActive="!bg-brand/10 !text-brand"
+            ariaCurrentWhenActive="page"
+            class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+          >
+            {{ 'common.fashion' | translate }}
+          </a>
+          <a
+            routerLink="/categories/6439d30b67d9aa4ca97064b1"
+            routerLinkActive="!bg-brand/10 !text-brand"
+            ariaCurrentWhenActive="page"
+            class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+          >
+            {{ 'common.beautyHealth' | translate }}
+          </a>
+        </div>
+      </div>
+
+      <a routerLink="/brands" routerLinkActive="!text-brand" ariaCurrentWhenActive="page" class="text-sm font-semibold text-muted transition hover:text-brand">
+        {{ 'common.brands' | translate }}
+      </a>
+    </nav>
+
+    
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <button
+        type="button"
+        role="switch"
+        [attr.aria-checked]="isArabic()"
+        [attr.aria-label]="'common.changeLanguage' | translate"
+        dir="ltr"
+        (click)="toggleLang()"
+        class="relative hidden h-10 w-[88px] items-center rounded-full border border-border bg-background p-1 text-xs font-bold transition hover:border-brand focus-visible:ring-2 focus-visible:ring-brand sm:flex"
+      >
+        <span
+          class="cosmic-gradient absolute left-1 top-1 h-8 w-10 rounded-full shadow-md shadow-brand/30 transition-transform duration-300"
+          [style.transform]="isArabic() ? 'translateX(100%)' : 'translateX(0)'"
+        ></span>
+        <span
+          class="relative z-10 w-10 text-center transition-colors"
+          [class.text-white]="!isArabic()"
+          [class.text-muted]="isArabic()"
+          >EN</span
+        >
+        <span
+          class="relative z-10 w-10 text-center text-sm transition-colors"
+          [class.text-white]="isArabic()"
+          [class.text-muted]="!isArabic()"
+          >ع</span
+        >
+      </button>
+
+      
+      <button
+        type="button"
+        (click)="themeService.toggleTheme()"
+        class="hidden h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-text transition hover:border-brand hover:text-brand sm:flex"
+        [attr.aria-label]="'common.toggleTheme' | translate"
+      >
+        @if (themeService.theme() === 'dark') {
+          <i class="fa-solid fa-sun text-amber-400"></i>
+        } @else {
+          <i class="fa-solid fa-moon text-brand"></i>
+        }
+      </button>
+
+      
+      <a
+        routerLink="/wishlist"
+        routerLinkActive="!bg-brand/10 !text-brand"
+        ariaCurrentWhenActive="page"
+        [attr.aria-label]="'common.wishlist' | translate"
+        class="relative hidden h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-brand/10 hover:text-brand sm:flex"
+      >
+        <i class="fa-regular fa-heart text-lg"></i>
+        <span
+          class="absolute -right-0.5 -top-0.5 z-10 flex min-h-4 min-w-4 items-center justify-center rounded-full cosmic-gradient px-1 text-[9px] font-bold text-white"
+        >
+          {{ numberOfwishlistItems() }}
+        </span>
+      </a>
+
+      
+      <a
+        routerLink="/cart"
+        routerLinkActive="!bg-brand/10 !text-brand"
+        ariaCurrentWhenActive="page"
+        [attr.aria-label]="'common.cart' | translate"
+        class="relative flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-brand/10 hover:text-brand"
+      >
+        <i class="fa-solid fa-cart-shopping text-lg"></i>
+        <span
+          class="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full cosmic-gradient text-[9px] text-white"
+        >
+          {{ numberOfCartItems() }}
+        </span>
+      </a>
+
+      
+      @if (isLogged()) {
+        
+        <div class="hidden lg:block">
+          <button
+            type="button"
+            id="user-menu-button"
+            data-dropdown-toggle="user-dropdown"
+            data-dropdown-placement="bottom-end"
+            [attr.aria-label]="'common.profileSettings' | translate"
+            class="flex h-10 items-center gap-2 rounded-full border border-border bg-background p-1 pe-3 text-sm font-semibold text-text transition hover:border-brand focus-visible:ring-2 focus-visible:ring-brand"
+          >
+            <span
+              class="cosmic-gradient flex size-8 items-center justify-center rounded-full text-sm font-bold text-white"
+            >
+              {{ userName().slice(0, 1) }}
+            </span>
+            <span class="max-w-28 truncate">{{ userName() }}</span>
+            <i class="fa-solid fa-chevron-down text-[10px] text-muted"></i>
+          </button>
+
+          <div
+            id="user-dropdown"
+            class="z-50 my-2 hidden w-56 divide-y divide-border rounded-xl border border-border bg-surface shadow-xl shadow-brand/10"
+          >
+            <div class="px-4 py-3">
+              <span class="block truncate text-sm font-semibold text-text">{{ userName() }}</span>
+              <span class="block truncate text-xs text-muted">{{ userEmail() }}</span>
+            </div>
+
+            <ul class="p-2 text-sm" aria-labelledby="user-menu-button">
+              <li>
+                <a
+                  routerLink="/profile"
+                  routerLinkActive="!border-brand !text-brand"
+                  ariaCurrentWhenActive="page"
+                  (click)="closeUserMenu()"
+                  class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-text transition hover:bg-brand/10 hover:text-brand"
+                >
+                <i class="fa-solid fa-user-gear w-4 text-center text-brand"></i>{{ 'common.profileSettings' | translate }}
+                </a>
+              </li>
+            </ul>
+
+            <div class="p-2 text-sm">
+              <button
+                type="button"
+                (click)="logout()"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 font-medium text-rose-700 transition hover:bg-rose-700/10 dark:text-rose-300"
+              >
+                <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>{{ 'common.signOut' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <a
+          routerLink="/login"
+          class="hidden items-center gap-2 rounded-full cosmic-gradient px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/20 transition hover:scale-105 lg:flex"
+        >
+          <i class="fa-regular fa-user"></i>
+          {{ 'common.signIn' | translate }}
+        </a>
+      }
+
+      
+      <button
+        type="button"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen()"
+        aria-controls="mobile-menu"
+        [attr.aria-label]="'common.toggleMenu' | translate"
+        class="flex h-10 w-10 items-center justify-center rounded-full cosmic-gradient text-white transition hover:scale-105 xl:hidden"
+      >
+        <i
+          class="fa-solid"
+          [class.fa-bars]="!isMobileMenuOpen()"
+          [class.fa-xmark]="isMobileMenuOpen()"
+        ></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+@if (isMobileMenuOpen()) {
+  <div
+    id="mobile-menu"
+    class="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border bg-surface xl:hidden"
+  >
+    <div class="container mx-auto space-y-3 px-4 py-4">
+      
+      <form class="relative">
+        <input
+          type="search"
+          [placeholder]="'common.search' | translate"
+          class="w-full rounded-full border border-border bg-background py-3 ps-5 pe-14 text-sm text-text outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+        />
+        <button
+          type="submit"
+          [attr.aria-label]="'common.search' | translate"
+          class="cosmic-gradient absolute end-1.5 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full text-white"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      
+      <nav class="space-y-1 border-t border-border pt-3 text-text">
+        <a
+          routerLink="/"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-3 font-semibold transition hover:bg-brand/10 hover:text-brand"
+        >
+          <i class="fa-solid fa-house w-5 text-center"></i>{{ 'common.home' | translate }}
+        </a>
+        <a
+          routerLink="/shop"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-3 font-semibold transition hover:bg-brand/10 hover:text-brand"
+        >
+          <i class="fa-solid fa-bag-shopping w-5 text-center"></i>{{ 'common.shop' | translate }}
+        </a>
+        <a
+          routerLink="/categories"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-3 font-semibold transition hover:bg-brand/10 hover:text-brand"
+        >
+          <i class="fa-solid fa-layer-group w-5 text-center"></i>{{ 'common.categories' | translate }}
+        </a>
+        <a
+          routerLink="/brands"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-3 font-semibold transition hover:bg-brand/10 hover:text-brand"
+        >
+          <i class="fa-solid fa-tags w-5 text-center"></i>{{ 'common.brands' | translate }}
+        </a>
+      </nav>
+
+      
+      <div class="space-y-1 border-t border-border pt-3 text-text">
+        <a
+          routerLink="/wishlist"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-2.5 font-semibold transition hover:bg-brand/10 sm:hidden"
+        >
+          <span
+            class="flex size-10 items-center justify-center rounded-full bg-brand/10 text-rose-600 dark:text-rose-300"
+          >
+            <i class="fa-regular fa-heart"></i>
+          </span>
+          {{ 'common.wishlist' | translate }}
+          <span
+            class="cosmic-gradient ms-auto min-w-6 rounded-full px-2 py-0.5 text-center text-xs font-bold text-white"
+            >{{ numberOfwishlistItems() }}</span
+          >
+        </a>
+        <a
+          routerLink="/cart"
+          routerLinkActive="!bg-brand/10 !text-brand"
+          ariaCurrentWhenActive="page"
+          class="flex items-center gap-3 rounded-xl px-3 py-2.5 font-semibold transition hover:bg-brand/10"
+        >
+          <span
+            class="flex size-10 items-center justify-center rounded-full bg-brand/10 text-brand"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
+          </span>
+          {{ 'common.cart' | translate }}
+          <span
+            class="cosmic-gradient ms-auto min-w-6 rounded-full px-2 py-0.5 text-center text-xs font-bold text-white"
+            >{{ numberOfCartItems() }}</span
+          >
+        </a>
+      </div>
+
+      
+      <div class="space-y-2 border-t border-border pt-3 sm:hidden">
+        <div class="flex items-center justify-between px-3">
+          <span class="text-sm font-medium text-muted">{{ 'common.language' | translate }}</span>
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="isArabic()"
+            [attr.aria-label]="'common.changeLanguage' | translate"
+            dir="ltr"
+            (click)="toggleLang()"
+            class="relative flex h-10 w-[88px] items-center rounded-full border border-border bg-background p-1 text-xs font-bold"
+          >
+            <span
+              class="cosmic-gradient absolute left-1 top-1 h-8 w-10 rounded-full shadow-md shadow-brand/30 transition-transform duration-300"
+              [style.transform]="isArabic() ? 'translateX(100%)' : 'translateX(0)'"
+            ></span>
+            <span
+              class="relative z-10 w-10 text-center transition-colors"
+              [class.text-white]="!isArabic()"
+              [class.text-muted]="isArabic()"
+              >EN</span
+            >
+            <span
+              class="relative z-10 w-10 text-center text-sm transition-colors"
+              [class.text-white]="isArabic()"
+              [class.text-muted]="!isArabic()"
+              >ع</span
+            >
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between px-3">
+          <span class="text-sm font-medium text-muted">{{ 'common.theme' | translate }}</span>
+          <button
+            type="button"
+            (click)="themeService.toggleTheme()"
+            [attr.aria-label]="'common.toggleTheme' | translate"
+            class="flex size-10 items-center justify-center rounded-full border border-border bg-background text-text transition hover:border-brand hover:text-brand"
+          >
+            @if (themeService.theme() === 'dark') {
+              <i class="fa-solid fa-sun text-amber-400"></i>
+            } @else {
+              <i class="fa-solid fa-moon text-brand"></i>
+            }
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="space-y-1 border-t border-border pt-3 text-text lg:hidden">
+        @if (isLogged()) {
+          <a
+            routerLink="/profile"
+            routerLinkActive="!text-brand"
+            ariaCurrentWhenActive="page"
+            class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-brand/10"
+          >
+            <span
+              class="cosmic-gradient flex size-10 items-center justify-center rounded-full font-bold text-white"
+            >
+              {{ userName().slice(0, 1) }}
+            </span>
+            <span class="min-w-0">
+              <span class="block truncate font-semibold">{{ userName() }}</span>
+              <span class="block truncate text-xs text-muted">{{ 'common.profileSettings' | translate }}</span>
+            </span>
+          </a>
+          <button
+            type="button"
+            (click)="logout()"
+            class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-semibold text-rose-700 transition hover:bg-rose-700/10 dark:text-rose-300"
+          >
+            <span class="flex size-10 items-center justify-center rounded-full bg-rose-700/10">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </span>
+            {{ 'common.signOut' | translate }}
+          </button>
+        } @else {
+          <a
+            routerLink="/login"
+            class="cosmic-gradient flex items-center justify-center gap-2 rounded-xl px-4 py-3 font-bold text-white shadow-lg shadow-brand/25"
+          >
+            <i class="fa-regular fa-user"></i>{{ 'common.signIn' | translate }}
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+}

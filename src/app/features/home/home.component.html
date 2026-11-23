@@ -1,0 +1,531 @@
+<section>
+  <swiper-container
+    class="home-hero-swiper block w-full"
+    slides-per-view="1"
+    loop="true"
+    autoplay="true"
+    autoplay-delay="5000"
+    autoplay-disable-on-interaction="false"
+    navigation="true"
+    pagination="true"
+    aria-label="Featured store offers"
+  >
+    <swiper-slide>
+      <article
+        class="relative isolate flex min-h-[380px] items-center overflow-hidden bg-slate-900 md:min-h-[520px]"
+      >
+        <img
+          src="assets/imgs/heart.jpg"
+          alt="Fresh fruit and vegetables displayed in a grocery store"
+          class="absolute inset-0 -z-20 h-full w-full object-cover"
+          fetchpriority="high"
+        />
+        <div
+          class="absolute inset-0 -z-10 bg-gradient-to-r from-brand-950/90 via-brand-900/65 to-cosmic-blue/15"
+        ></div>
+        <div class="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
+          <div class="max-w-2xl text-white">
+            <p class="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-brand-200">
+              Fresh from the market
+            </p>
+            <h1 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
+              Fresh products delivered to your door
+            </h1>
+            <p class="mt-5 text-lg text-white/90 sm:text-xl">
+              Get 20% off your first order and fill your kitchen with something good.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                routerLink="/shop"
+                class="rounded-xl bg-white px-6 py-3 font-bold text-brand-700 transition hover:bg-brand-50"
+                >Shop now</a
+              >
+              <a
+                routerLink="/categories"
+                class="rounded-xl border border-white/70 px-6 py-3 font-bold text-white transition hover:bg-white/15"
+                >Explore categories</a
+              >
+            </div>
+          </div>
+        </div>
+      </article>
+    </swiper-slide>
+
+    <swiper-slide>
+      <article
+        class="relative isolate flex min-h-[380px] items-center overflow-hidden bg-slate-900 md:min-h-[520px]"
+      >
+        <img
+          src="assets/imgs/carrots.jpg"
+          alt="Colorful fresh produce in a supermarket fruit and vegetable section"
+          class="absolute inset-0 -z-20 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 -z-10 bg-gradient-to-r from-violet-950/90 via-violet-900/65 to-violet-900/10"
+        ></div>
+        <div class="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
+          <div class="max-w-2xl text-white">
+            <p class="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-violet-200">
+              Your weekly favorites
+            </p>
+            <h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
+              Good food starts with fresh choices
+            </h2>
+            <p class="mt-5 text-lg text-white/90 sm:text-xl">
+              Browse hand-picked produce, pantry essentials, and everyday deals.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                routerLink="/shop"
+                class="rounded-xl bg-white px-6 py-3 font-bold text-violet-800 transition hover:bg-violet-50"
+                >Browse the shop</a
+              >
+              <a
+                routerLink="/brands"
+                class="rounded-xl border border-white/70 px-6 py-3 font-bold text-white transition hover:bg-white/15"
+                >Shop brands</a
+              >
+            </div>
+          </div>
+        </div>
+      </article>
+    </swiper-slide>
+  </swiper-container>
+</section>
+<section class="py-10">
+  <div class="container mx-auto px-4">
+    <div class="my-8 flex items-center gap-3">
+      <div class="h-8 w-1.5 rounded-full bg-linear-to-b from-brand-600 to-cosmic-cyan"></div>
+      <h2 class="text-3xl font-bold text-text">
+        {{ 'home.featured' | translate }}
+        <span
+          class="bg-linear-to-r from-brand-600 via-cosmic-blue to-[#0891b2] bg-clip-text text-transparent"
+          >{{ 'home.category' | translate }}</span
+        >
+      </h2>
+    </div>
+
+    <app-categories-cards> </app-categories-cards>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div
+        (click)="toggleFlip(1)"
+        class="group relative h-[230px] w-full cursor-pointer [perspective:1000px]"
+      >
+        <div
+          [class.rotate-y-180]="isFlipped1"
+          class="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d]"
+        >
+          <div
+            class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-r from-brand-600 via-cosmic-blue to-cosmic-cyan p-6 sm:p-7 text-white shadow-lg overflow-hidden flex flex-col justify-between [backface-visibility:hidden]"
+          >
+            <div
+              class="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-white/15"
+            ></div>
+            <div
+              class="pointer-events-none absolute -bottom-12 -left-8 h-32 w-32 rounded-full bg-white/10"
+            ></div>
+
+            <div class="relative z-10">
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-xs px-3 py-1 text-xs font-medium text-white"
+              >
+                <span>⚡</span>
+                <span>{{ 'home.dealOfDay' | translate }}</span>
+              </span>
+              <h3 class="mt-3 text-2xl font-bold tracking-tight text-white">
+                {{ 'home.freshFruit' | translate }}
+              </h3>
+              <p class="mt-1 text-sm text-white/85">{{ 'home.fruitDiscount' | translate }}</p>
+            </div>
+
+            <div class="relative z-10 flex items-center justify-between gap-4 pt-2">
+              <div class="flex items-baseline gap-2.5">
+                <span class="text-2xl sm:text-3xl font-extrabold tracking-tight">40% OFF</span>
+                <span class="text-xs text-white/80">{{ 'home.clickFlip' | translate }}</span>
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow-sm transition-transform duration-200 hover:scale-105"
+              >
+                <span>{{ 'home.revealCode' | translate }}</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="absolute inset-0 h-full w-full rounded-2xl bg-surface border border-border p-6 sm:p-7 text-text shadow-xl overflow-hidden flex flex-col justify-between rotate-y-180 [backface-visibility:hidden]"
+          >
+            <div
+              class="pointer-events-none absolute -top-12 -right-12 h-36 w-36 rounded-full bg-brand/15 blur-xl"
+            ></div>
+            <div
+              class="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cosmic-cyan/15 blur-xl"
+            ></div>
+
+            <div class="relative z-10 flex items-center justify-between">
+              <span
+                class="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-400"
+                >{{ 'home.promoCode' | translate }}</span
+              >
+              <span class="text-xs font-medium text-muted"
+                >↺ {{ 'home.flipBack' | translate }}</span
+              >
+            </div>
+
+            <div
+              class="relative z-10 my-auto flex items-center justify-between gap-3 rounded-xl border-2 border-dashed border-brand/50 bg-brand-50/60 dark:bg-brand-950/60 px-4 py-3"
+            >
+              <div>
+                <p class="text-[11px] text-muted">{{ 'home.promoCode' | translate }}</p>
+                <p
+                  class="font-mono text-xl sm:text-2xl font-extrabold tracking-widest text-cosmic-gradient"
+                >
+                  ORGANIC40
+                </p>
+              </div>
+              <button
+                type="button"
+                (click)="copyCode($event, 'ORGANIC40', 1)"
+                class="cosmic-gradient rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-95"
+              >
+                {{ copied1 ? ('home.copied' | translate) : ('home.copyCode' | translate) }}
+              </button>
+            </div>
+
+            <p class="relative z-10 text-xs text-muted text-center">
+              {{ 'home.fruitTerms' | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        (click)="toggleFlip(2)"
+        class="group relative h-[230px] w-full cursor-pointer [perspective:1000px]"
+      >
+        <div
+          [class.rotate-y-180]="isFlipped2"
+          class="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d]"
+        >
+          <div
+            class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-r from-brand-900 via-brand-600 to-brand-400 p-6 sm:p-7 text-white shadow-lg overflow-hidden flex flex-col justify-between [backface-visibility:hidden]"
+          >
+            <div
+              class="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-white/15"
+            ></div>
+            <div
+              class="pointer-events-none absolute -bottom-12 -left-8 h-32 w-32 rounded-full bg-white/10"
+            ></div>
+
+            <div class="relative z-10">
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-xs px-3 py-1 text-xs font-medium text-white"
+              >
+                <span>✨</span>
+                <span>{{ 'home.newArrivals' | translate }}</span>
+              </span>
+              <h3 class="mt-3 text-2xl font-bold tracking-tight text-white">
+                {{ 'home.vegetables' | translate }}
+              </h3>
+              <p class="mt-1 text-sm text-white/85">
+                {{ 'home.vegetableDescription' | translate }}
+              </p>
+            </div>
+
+            <div class="relative z-10 flex items-center justify-between gap-4 pt-2">
+              <div class="flex items-baseline gap-2.5">
+                <span class="text-2xl sm:text-3xl font-extrabold tracking-tight">25% OFF</span>
+                <span class="text-xs text-white/80">{{ 'home.clickFlip' | translate }}</span>
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-800 shadow-sm transition-transform duration-200 hover:scale-105"
+              >
+                <span>{{ 'home.exploreNow' | translate }}</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="absolute inset-0 h-full w-full rounded-2xl bg-surface border border-border p-6 sm:p-7 text-text shadow-xl overflow-hidden flex flex-col justify-between rotate-y-180 [backface-visibility:hidden]"
+          >
+            <div
+              class="pointer-events-none absolute -top-12 -right-12 h-36 w-36 rounded-full bg-brand/15 blur-xl"
+            ></div>
+            <div
+              class="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cosmic-cyan/15 blur-xl"
+            ></div>
+
+            <div class="relative z-10 flex items-center justify-between">
+              <span
+                class="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-400"
+                >{{ 'home.exclusiveOffers' | translate }}</span
+              >
+              <span class="text-xs font-medium text-muted"
+                >↺ {{ 'home.flipBack' | translate }}</span
+              >
+            </div>
+
+            <div
+              class="relative z-10 my-auto flex items-center justify-between gap-3 rounded-xl border-2 border-dashed border-brand/50 bg-brand-50/60 dark:bg-brand-950/60 px-4 py-3"
+            >
+              <div>
+                <p class="text-[11px] text-muted">{{ 'home.promoCode' | translate }}</p>
+                <p
+                  class="font-mono text-xl sm:text-2xl font-extrabold tracking-widest text-cosmic-gradient"
+                >
+                  FRESH25
+                </p>
+              </div>
+              <button
+                type="button"
+                (click)="copyCode($event, 'FRESH25', 2)"
+                class="cosmic-gradient rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-95"
+              >
+                {{ copied2 ? ('home.copied' | translate) : ('home.copyCode' | translate) }}
+              </button>
+            </div>
+
+            <p class="relative z-10 text-xs text-muted text-center">
+              {{ 'home.vegetableTerms' | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-10">
+  <div class="container mx-auto px-4">
+    <div class="my-8 flex items-center gap-3">
+      <div class="h-8 w-1.5 rounded-full bg-linear-to-b from-brand-600 to-cosmic-cyan"></div>
+      <h2 class="text-3xl font-bold text-text">
+        {{ 'home.featured' | translate }}
+        <span
+          class="bg-linear-to-r from-brand-600 via-cosmic-blue to-[#0891b2] bg-clip-text text-transparent"
+        >
+          {{ 'home.products' | translate }}
+        </span>
+      </h2>
+    </div>
+
+    @if (isLoadingProducts()) {
+      <div
+        class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        aria-busy="true"
+      >
+        @for (i of skeletons; track i) {
+          <div class="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div class="h-60 animate-pulse bg-border/60"></div>
+            <div class="space-y-3 p-4">
+              <div class="h-4 w-1/3 animate-pulse rounded-full bg-border/60"></div>
+              <div class="h-4 w-4/5 animate-pulse rounded-full bg-border/60"></div>
+              <div class="h-8 w-1/2 animate-pulse rounded-full bg-border/60"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (productsList().length) {
+      <div
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+      >
+        @for (product of productsList(); track product._id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    } @else {
+      <p class="rounded-2xl border border-border bg-surface p-8 text-center text-muted">
+        {{ 'empty.products' | translate }}
+      </p>
+    }
+  </div>
+</section>
+
+<section class="px-4 py-12 sm:px-6 lg:px-8">
+  <div
+    class="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-brand/15 bg-gradient-to-br from-brand-50 via-white to-violet-100 p-6 shadow-sm dark:border-brand/20 dark:from-[#171126] dark:via-[#1c1630] dark:to-[#24183b] sm:p-10 lg:p-12"
+  >
+    <div
+      class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand/10 blur-3xl"
+    ></div>
+    <div
+      class="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-violet-300/20 blur-3xl"
+    ></div>
+
+    <div class="relative grid items-center gap-10 lg:grid-cols-[1fr_300px] lg:gap-12">
+      <div>
+        <div class="mb-6 flex flex-wrap items-center gap-3">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand"
+          >
+            <i class="fa-solid fa-envelope text-xl"></i>
+          </div>
+
+          <div>
+            <p class="text-xs font-bold tracking-[3px] text-brand">
+              {{ 'home.newsletterLabel' | translate }}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              {{ 'home.growingCommunity' | translate }}
+            </p>
+          </div>
+        </div>
+
+        <p class="mb-3 text-sm font-semibold text-gray-500 dark:text-gray-400">
+          <i class="fa-solid fa-users text-brand"></i>
+          {{ 'home.subscribers' | translate }}
+        </p>
+
+        <h2
+          class="max-w-2xl text-3xl font-extrabold leading-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl"
+        >
+          {{ 'home.discoverMore' | translate }}
+          <span
+            class="block bg-gradient-to-r from-brand to-violet-400 bg-clip-text text-transparent"
+          >
+            {{ 'home.shopSmarter' | translate }}
+          </span>
+        </h2>
+
+        <p class="mt-5 max-w-xl text-sm leading-7 text-gray-600 dark:text-gray-300 sm:text-base">
+          {{ 'home.newsletter' | translate }}
+        </p>
+
+        <div class="mt-7 flex flex-wrap gap-3">
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-white/70 px-4 py-2 text-xs font-semibold text-gray-700 dark:border-brand/20 dark:bg-white/5 dark:text-gray-200"
+          >
+            <i class="fa-solid fa-sparkles text-brand"></i>
+            {{ 'home.newArrivals' | translate }}
+          </span>
+
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-white/70 px-4 py-2 text-xs font-semibold text-gray-700 dark:border-brand/20 dark:bg-white/5 dark:text-gray-200"
+          >
+            <i class="fa-solid fa-tags text-brand"></i>
+            {{ 'home.exclusiveOffers' | translate }}
+          </span>
+
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-white/70 px-4 py-2 text-xs font-semibold text-gray-700 dark:border-brand/20 dark:bg-white/5 dark:text-gray-200"
+          >
+            <i class="fa-solid fa-truck-fast text-brand"></i>
+            {{ 'home.specialDeals' | translate }}
+          </span>
+        </div>
+
+        <form class="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row">
+          <div class="relative flex-1">
+            <i
+              class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            ></i>
+
+            <input
+              type="email"
+              [placeholder]="'home.enterEmail' | translate"
+              class="w-full rounded-xl border border-brand/15 bg-white px-11 py-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-white/10 dark:bg-white/5 dark:text-white"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand to-violet-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-brand/20 transition hover:-translate-y-0.5 hover:shadow-brand/30"
+          >
+            {{ 'home.subscribe' | translate }}
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+
+        <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+          <i class="fa-solid fa-shield-halved mr-1 text-brand"></i>
+          {{ 'home.noSpam' | translate }}
+        </p>
+      </div>
+
+      <div
+        class="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#211638] via-[#30204e] to-[#4c2b79] p-7 text-white shadow-2xl shadow-brand/20"
+      >
+        <div class="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-brand/30 blur-3xl"></div>
+        <div
+          class="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-violet-400/20 blur-3xl"
+        ></div>
+
+        <div class="relative">
+          <div class="mb-7 flex items-center justify-between">
+            <span
+              class="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[2px] text-violet-200"
+            >
+              {{ 'home.app' | translate }}
+            </span>
+
+            <i class="fa-solid fa-mobile-screen-button text-2xl text-violet-300"></i>
+          </div>
+
+          <div
+            class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-lg"
+          >
+            <span class="text-3xl font-black tracking-tighter text-white">C.</span>
+          </div>
+
+          <h3 class="text-2xl font-extrabold leading-tight">
+            {{ 'home.shopping' | translate }}
+            <span class="block text-violet-300">{{ 'home.universe' | translate }}</span>
+          </h3>
+
+          <p class="mt-3 text-sm leading-6 text-violet-100/75">
+            {{ 'home.appDescription' | translate }}
+          </p>
+
+          <div class="mt-7 space-y-3">
+            <a
+              href="#"
+              class="flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 px-4 py-3 transition hover:bg-white/15"
+            >
+              <i class="fa-brands fa-apple text-2xl"></i>
+              <div>
+                <p class="text-[9px] text-violet-200">{{ 'home.downloadOn' | translate }}</p>
+                <p class="text-sm font-bold">{{ 'home.appStore' | translate }}</p>
+              </div>
+            </a>
+
+            <a
+              href="#"
+              class="flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 px-4 py-3 transition hover:bg-white/15"
+            >
+              <i class="fa-brands fa-google-play text-xl"></i>
+              <div>
+                <p class="text-[9px] text-violet-200">{{ 'home.getItOn' | translate }}</p>
+                <p class="text-sm font-bold">{{ 'home.googlePlay' | translate }}</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="mt-7 border-t border-white/15 pt-5">
+            <div class="flex items-center gap-1 text-amber-300">
+              <i class="fa-solid fa-star text-xs"></i>
+              <i class="fa-solid fa-star text-xs"></i>
+              <i class="fa-solid fa-star text-xs"></i>
+              <i class="fa-solid fa-star text-xs"></i>
+              <i class="fa-solid fa-star text-xs"></i>
+              <span class="ml-2 text-xs font-semibold text-white">{{
+                'home.loveExperience' | translate
+              }}</span>
+            </div>
+
+            <p class="mt-2 text-xs text-violet-200/70">{{ 'home.experience' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

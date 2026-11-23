@@ -1,0 +1,382 @@
+<section class="container mx-auto px-4 py-12 lg:py-16">
+  <div class="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-5">
+    <aside
+      class="cosmic-gradient relative hidden h-fit self-center overflow-hidden rounded-3xl p-7 text-white lg:col-span-2 lg:flex lg:flex-col"
+    >
+      <div class="relative">
+        <img src="assets/imgs/cosmic.svg" alt="Cosmic" class="mb-4 size-16 drop-shadow-xl" />
+
+        <h1 class="text-2xl font-bold">{{ 'auth.welcome' | translate }}</h1>
+        <p class="mt-2 max-w-md text-sm leading-relaxed text-white/80">
+          {{ 'auth.discover' | translate }}
+        </p>
+
+        <div class="mt-7 grid grid-cols-3 gap-3">
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4">
+            <i class="fa-solid fa-star text-xl"></i>
+            <h2 class="mt-3 text-sm font-semibold">{{ 'auth.quality' | translate }}</h2>
+            <p class="mt-1 text-xs text-white/70">{{ 'auth.trustedProducts' | translate }}</p>
+          </div>
+
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4">
+            <i class="fa-solid fa-truck-fast text-xl"></i>
+            <h2 class="mt-3 text-sm font-semibold">{{ 'auth.fastDelivery' | translate }}</h2>
+            <p class="mt-1 text-xs text-white/70">{{ 'auth.quickShipping' | translate }}</p>
+          </div>
+
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4">
+            <i class="fa-solid fa-shield-halved text-xl"></i>
+            <h2 class="mt-3 text-sm font-semibold">{{ 'auth.secure' | translate }}</h2>
+            <p class="mt-1 text-xs text-white/70">{{ 'auth.safePayments' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div
+      class="rounded-3xl border border-border bg-surface p-6 shadow-xl shadow-brand/5 sm:p-10 lg:col-span-3"
+    >
+      <div class="mb-8 text-center">
+        <h2 class="mb-2 text-3xl font-bold text-text">
+          {{ 'auth.createYourAccount' | translate }}
+        </h2>
+        <p class="text-muted">{{ 'auth.startJourney' | translate }}</p>
+      </div>
+
+      @let name = registerForm.controls.name;
+      @let email = registerForm.controls.email;
+      @let phone = registerForm.controls.phone;
+      @let pass = registerForm.controls.password;
+      @let rePass = registerForm.controls.rePassword;
+      @let terms = registerForm.controls.terms;
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="submitform()"
+        novalidate
+        class="mx-auto grid w-full max-w-xl gap-5 rounded-3xl border border-border bg-surface p-6 shadow-xl shadow-brand/5 sm:p-10"
+      >
+        <div class="text-center">
+          <a routerLink="/" class="mb-5 inline-block" aria-label="Cosmic home">
+            <img src="assets/imgs/cosmic-logo-light.svg" alt="COSMIC" class="h-14 dark:hidden" />
+            <img
+              src="assets/imgs/cosmic-logo-dark.svg"
+              alt="COSMIC"
+              class="hidden h-14 dark:block"
+            />
+          </a>
+          <h2 class="mb-2 text-4xl font-extrabold text-text">{{ 'auth.signUp' | translate }}</h2>
+          <p class="text-lg text-muted">
+            {{ 'auth.community' | translate }}
+          </p>
+        </div>
+
+        <div>
+          <div class="relative">
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              autocomplete="name"
+              placeholder=" "
+              [attr.aria-invalid]="name.invalid && (name.dirty || name.touched)"
+              class="peer block w-full rounded-xl border-2 border-border bg-transparent px-3 pb-2.5 pt-4 text-sm text-text outline-none transition focus:border-brand aria-invalid:border-red-500 aria-invalid:focus:border-red-500"
+            />
+            <label
+              for="name"
+              class="pointer-events-none absolute start-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center bg-surface px-2 text-sm text-muted transition-all duration-200 ltr:origin-left rtl:origin-right peer-focus:top-0 peer-focus:scale-75 peer-focus:text-brand peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:scale-75"
+            >
+              <i class="fa-regular fa-user me-2"></i>{{ 'auth.fullName' | translate }}
+            </label>
+          </div>
+          @if (name.invalid && (name.dirty || name.touched)) {
+            <div
+              role="alert"
+              class="mt-2 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+            >
+              <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+              <div>
+                <span class="font-medium">{{ 'auth.requirements' | translate }}</span>
+                <ul class="mt-1.5 list-disc space-y-1 ps-5">
+                  @if (name.hasError('required')) {
+                    <li>{{ 'auth.nameRequired' | translate }}</li>
+                  }
+                  @if (name.hasError('minlength')) {
+                    <li>{{ 'auth.nameMin' | translate }}</li>
+                  }
+                  @if (name.hasError('maxlength')) {
+                    <li>{{ 'auth.nameMax' | translate }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div>
+          <div class="relative">
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder=" "
+              [attr.aria-invalid]="email.invalid && (email.dirty || email.touched)"
+              class="peer block w-full rounded-xl border-2 border-border bg-transparent px-3 pb-2.5 pt-4 text-sm text-text outline-none transition focus:border-brand aria-invalid:border-red-500 aria-invalid:focus:border-red-500"
+            />
+            <label
+              for="email"
+              class="pointer-events-none absolute start-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center bg-surface px-2 text-sm text-muted transition-all duration-200 ltr:origin-left rtl:origin-right peer-focus:top-0 peer-focus:scale-75 peer-focus:text-brand peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:scale-75"
+            >
+              <i class="fa-regular fa-envelope me-2"></i>{{ 'auth.email' | translate }}
+            </label>
+          </div>
+          @if (email.invalid && (email.dirty || email.touched)) {
+            <div
+              role="alert"
+              class="mt-2 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+            >
+              <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+              <div>
+                <span class="font-medium">{{ 'auth.requirements' | translate }}</span>
+                <ul class="mt-1.5 list-disc space-y-1 ps-5">
+                  @if (email.hasError('required')) {
+                    <li>{{ 'auth.emailRequired' | translate }}</li>
+                  }
+                  @if (email.hasError('email')) {
+                    <li>{{ 'auth.emailInvalid' | translate }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div>
+          <div class="relative">
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              autocomplete="tel"
+              placeholder=" "
+              [attr.aria-invalid]="phone.invalid && (phone.dirty || phone.touched)"
+              class="peer block w-full rounded-xl border-2 border-border bg-transparent px-3 pb-2.5 pt-4 text-sm text-text outline-none transition focus:border-brand aria-invalid:border-red-500 aria-invalid:focus:border-red-500"
+            />
+            <label
+              for="phone"
+              class="pointer-events-none absolute start-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center bg-surface px-2 text-sm text-muted transition-all duration-200 ltr:origin-left rtl:origin-right peer-focus:top-0 peer-focus:scale-75 peer-focus:text-brand peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:scale-75"
+            >
+              <i class="fa-solid fa-phone me-2"></i>{{ 'auth.phone' | translate }}
+            </label>
+          </div>
+          @if (phone.invalid && (phone.dirty || phone.touched)) {
+            <div
+              role="alert"
+              class="mt-2 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+            >
+              <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+              <div>
+                <span class="font-medium">{{ 'auth.requirements' | translate }}</span>
+                <ul class="mt-1.5 list-disc space-y-1 ps-5">
+                  @if (phone.hasError('required')) {
+                    <li>{{ 'auth.phoneRequired' | translate }}</li>
+                  }
+                  @if (phone.hasError('pattern')) {
+                    <li>{{ 'auth.phoneInvalid' | translate }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div>
+          <div class="relative">
+            <input
+              id="password"
+              [type]="showPass() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password"
+              placeholder=" "
+              [attr.aria-invalid]="pass.invalid && (pass.dirty || pass.touched)"
+              class="peer block w-full rounded-xl border-2 border-border bg-transparent py-4 pb-2.5 ps-3 pe-12 text-sm text-text outline-none transition focus:border-brand aria-invalid:border-red-500 aria-invalid:focus:border-red-500"
+            />
+            <label
+              for="password"
+              class="pointer-events-none absolute start-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center bg-surface px-2 text-sm text-muted transition-all duration-200 ltr:origin-left rtl:origin-right peer-focus:top-0 peer-focus:scale-75 peer-focus:text-brand peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:scale-75"
+            >
+              <i class="fa-solid fa-lock me-2"></i>{{ 'auth.password' | translate }}
+            </label>
+            <button
+              type="button"
+              (click)="showPass.set(!showPass())"
+              [attr.aria-label]="'auth.togglePasswordVisibility' | translate"
+              class="absolute inset-y-0 end-0 flex items-center pe-4 text-muted transition hover:text-brand"
+            >
+              <i [class]="showPass() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'"></i>
+            </button>
+          </div>
+
+          @if (pass.invalid && (pass.dirty || pass.touched)) {
+            <div
+              role="alert"
+              class="mt-2 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+            >
+              <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+              <div>
+                <span class="font-medium">{{ 'auth.requirements' | translate }}</span>
+                <ul class="mt-1.5 list-disc space-y-1 ps-5">
+                  @if (pass.hasError('required')) {
+                    <li>{{ 'auth.passwordRequired' | translate }}</li>
+                  }
+                  @if (pass.hasError('pattern')) {
+                    <li>{{ 'auth.passwordStrength' | translate }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+
+          <div class="mt-3 flex items-center gap-2">
+            <div
+              class="h-1.5 grow overflow-hidden rounded-full bg-border"
+              role="progressbar"
+              [attr.aria-valuenow]="strength().width"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-label]="'auth.passwordStrengthLabel' | translate"
+            >
+              <div
+                class="h-full rounded-full transition-all duration-300"
+                [class]="strength().color"
+                [style.width.%]="strength().width"
+              ></div>
+            </div>
+            <span class="min-w-14 text-sm font-medium text-muted">
+              @if (strength().label) {
+                {{ ('auth.' + strength().label) | translate }}
+              }
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <div class="relative">
+            <input
+              id="rePassword"
+              [type]="showRePass() ? 'text' : 'password'"
+              formControlName="rePassword"
+              autocomplete="new-password"
+              placeholder=" "
+              [attr.aria-invalid]="
+                (rePass.invalid || registerForm.hasError('mismatch')) &&
+                (rePass.dirty || rePass.touched)
+              "
+              class="peer block w-full rounded-xl border-2 border-border bg-transparent py-4 pb-2.5 ps-3 pe-12 text-sm text-text outline-none transition focus:border-brand aria-invalid:border-red-500 aria-invalid:focus:border-red-500"
+            />
+            <label
+              for="rePassword"
+              class="pointer-events-none absolute start-3 top-1/2 z-10 inline-flex -translate-y-1/2 items-center bg-surface px-2 text-sm text-muted transition-all duration-200 ltr:origin-left rtl:origin-right peer-focus:top-0 peer-focus:scale-75 peer-focus:text-brand peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:scale-75"
+            >
+              <i class="fa-solid fa-key me-2"></i>{{ 'auth.confirmPassword' | translate }}
+            </label>
+            <button
+              type="button"
+              (click)="showRePass.set(!showRePass())"
+              [attr.aria-label]="'auth.togglePasswordVisibility' | translate"
+              class="absolute inset-y-0 end-0 flex items-center pe-4 text-muted transition hover:text-brand"
+            >
+              <i [class]="showRePass() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'"></i>
+            </button>
+          </div>
+          @if (
+            (rePass.invalid || registerForm.hasError('mismatch')) &&
+            (rePass.dirty || rePass.touched)
+          ) {
+            <div
+              role="alert"
+              class="mt-2 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+            >
+              <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+              <div>
+                <span class="font-medium">{{ 'auth.requirements' | translate }}</span>
+                <ul class="mt-1.5 list-disc space-y-1 ps-5">
+                  @if (rePass.hasError('required')) {
+                    <li>{{ 'auth.confirmRequired' | translate }}</li>
+                  } @else if (registerForm.hasError('mismatch')) {
+                    <li>{{ 'auth.passwordMismatch' | translate }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div>
+          <label class="flex cursor-pointer items-start gap-3 text-sm text-text">
+            <input
+              id="terms"
+              type="checkbox"
+              formControlName="terms"
+              class="mt-0.5 size-4 shrink-0 rounded accent-brand"
+            />
+            <span>
+              {{ 'auth.agreeToTerms' | translate }}
+              <a href="#" class="font-medium text-brand-700 hover:underline dark:text-brand-300">{{
+                'auth.terms' | translate
+              }}</a>
+              {{ 'auth.and' | translate }}
+              <a href="#" class="font-medium text-brand-700 hover:underline dark:text-brand-300">{{
+                'auth.privacy' | translate
+              }}</a>
+              *
+            </span>
+          </label>
+          @if (terms.invalid && (terms.dirty || terms.touched)) {
+            <p class="mt-1.5 text-xs text-red-500">{{ 'auth.acceptTerms' | translate }}</p>
+          }
+        </div>
+
+        @if (registerSuccessMessage()) {
+          <div
+            role="status"
+            class="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400"
+          >
+            <i class="fa-solid fa-circle-check mt-0.5"></i>
+            <p>{{ registerSuccessMessage() }}</p>
+          </div>
+        }
+        @if (registerErrorMessage()) {
+          <div
+            role="alert"
+            class="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400"
+          >
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+            <p>{{ registerErrorMessage() }}</p>
+          </div>
+        }
+
+        <button
+          type="submit"
+          [disabled]="isloading()"
+          class="cosmic-gradient flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-lg font-semibold text-white shadow-lg shadow-brand/25 transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {{ 'auth.signUp' | translate }}
+          @if (isloading()) {
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+          }
+        </button>
+      </form>
+
+      <p class="mt-8 border-t border-border pt-6 text-center text-muted">
+        {{ 'auth.alreadyHaveAccount' | translate }}
+        <a
+          routerLink="/login"
+          class="ms-1 font-semibold text-brand-700 hover:underline dark:text-brand-300"
+          >{{ 'auth.signIn' | translate }}</a
+        >
+      </p>
+    </div>
+  </div>
+</section>

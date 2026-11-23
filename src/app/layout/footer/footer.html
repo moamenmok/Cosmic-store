@@ -1,0 +1,198 @@
+<footer class="border-t border-white/10 bg-[#101828] text-gray-400">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-10 flex justify-start">
+      <a routerLink="/" aria-label="COSMIC home">
+        <img
+          src="assets/imgs/cosmic-logo-dark.svg"
+          alt="COSMIC"
+          class="my-2 block w-44 rounded-xl object-contain"
+        />
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-5 xl:gap-8">
+      
+      <div>
+        <p class="mb-6 max-w-md text-sm leading-7 text-gray-400">
+          {{ 'footer.description' | translate }}
+        </p>
+
+        
+        <div class="space-y-3 text-sm">
+          <a
+            href="tel:+201000000000"
+            class="flex items-center gap-3 transition hover:text-brand-400"
+          >
+            <i class="fa-solid fa-phone text-brand-400"></i>
+            +20 100 000 0000
+          </a>
+
+          <a
+            href="mailto:support@cosmic.com"
+            class="flex items-center gap-3 transition hover:text-brand-400"
+          >
+            <i class="fa-solid fa-envelope text-brand-400"></i>
+            support@cosmic.com
+          </a>
+
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-location-dot text-brand-400"></i>
+            Egypt
+          </div>
+        </div>
+
+        
+        <div class="mt-6 flex items-center gap-3">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 transition hover:bg-brand hover:text-white"
+          >
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a
+            href="https://x.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="X"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 transition hover:bg-brand hover:text-white"
+          >
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 transition hover:bg-brand hover:text-white"
+          >
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+
+          <a
+            href="https://youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 transition hover:bg-brand hover:text-white"
+          >
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+      
+      <div>
+        <h3 class="mb-6 text-base font-bold text-white">{{ 'footer.shop' | translate }}</h3>
+
+        <ul class="space-y-4 text-sm">
+          <li>
+            <a routerLink="/shop" class="transition hover:text-brand-400">{{ 'footer.allProducts' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/categories" class="transition hover:text-brand-400">{{ 'common.categories' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/brands" class="transition hover:text-brand-400">{{ 'common.brands' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/categories" class="transition hover:text-brand-400">
+              {{ 'footer.exploreCategories' | translate }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      
+      <div>
+        <h3 class="mb-6 text-base font-bold text-white">{{ 'footer.account' | translate }}</h3>
+
+        <ul class="space-y-4 text-sm">
+          <li>
+            <a routerLink="/login" class="transition hover:text-brand-400">{{ 'common.signIn' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/register" class="transition hover:text-brand-400">{{ 'footer.createAccount' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/wishlist" class="transition hover:text-brand-400">{{ 'common.wishlist' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/cart" class="transition hover:text-brand-400">{{ 'footer.shoppingCart' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/orders" class="transition hover:text-brand-400">{{ 'footer.orderHistory' | translate }}</a>
+          </li>
+        </ul>
+      </div>
+
+      
+      <div>
+        <h3 class="mb-6 text-base font-bold text-white">{{ 'footer.support' | translate }}</h3>
+
+        <ul class="space-y-4 text-sm">
+          <li>
+            <a href="mailto:support@cosmic.com" class="transition hover:text-brand-400">
+              {{ 'footer.contact' | translate }}
+            </a>
+          </li>
+          <li>
+            <a routerLink="/shipping" class="transition hover:text-brand-400">
+              {{ 'footer.shippingInfo' | translate }}
+            </a>
+          </li>
+          <li>
+            <a routerLink="/returns" class="transition hover:text-brand-400">{{ 'footer.returns' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/help" class="transition hover:text-brand-400">{{ 'footer.help' | translate }}</a>
+          </li>
+        </ul>
+
+      </div>
+
+      <div>
+        <h3 class="mb-6 text-base font-bold text-white">{{ 'footer.legal' | translate }}</h3>
+        <ul class="space-y-4 text-sm">
+          <li>
+            <a routerLink="/privacy" class="transition hover:text-brand-400">{{ 'footer.privacy' | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/terms" class="transition hover:text-brand-400">{{ 'footer.terms' | translate }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="border-t border-white/10">
+    <div
+      class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-4 py-6 sm:px-6 md:flex-row lg:px-8"
+    >
+      <p class="text-center text-xs text-gray-500">© {{ currentYear }} COSMIC. All rights reserved.</p>
+
+      
+      <div class="flex items-center gap-5 text-sm text-gray-400">
+        <span class="flex items-center gap-2">
+          <i class="fa-brands fa-cc-visa text-xl"></i>
+          Visa
+        </span>
+
+        <span class="flex items-center gap-2">
+          <i class="fa-brands fa-cc-mastercard text-xl"></i>
+          Mastercard
+        </span>
+
+        <span class="flex items-center gap-2">
+          <i class="fa-brands fa-cc-paypal text-xl"></i>
+          PayPal
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

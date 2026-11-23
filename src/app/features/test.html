@@ -1,0 +1,647 @@
+import {
+  Component,
+  computed,
+  effect,
+  HostListener,
+  inject,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter } from 'rxjs';
+
+import { ThemeMode } from '../../core/services/theme-mode';
+import { TranslationService } from '../../core/services/translation/translation.service';
+import { CartService } from '../../core/services/cart/cart.service';
+import { WishlistService } from '../../core/services/wishlist/wishlist.service';
+
+@Component({
+  selector: 'app-navbar',
+  imports: [RouterLink, RouterLinkActive],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.css',
+})
+export class Navbar implements OnInit {
+  themeService = inject(ThemeMode);
+
+  private readonly myTranslation = inject(TranslationService);
+  private readonly cartService = inject(CartService);
+  private readonly wishlistService = inject(WishlistService);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly router = inject(Router);
+
+  readonly isBrowser = isPlatformBrowser(this.platformId);
+  readonly isArabic = computed(() => this.myTranslation.lang() === 'ar');
+
+  numberOfCartItems = computed(() => this.cartService.cartCounter());
+  numberOfwishlistItems = computed(() => this.wishlistService.wishlistCounter());
+
+  isLogged = signal<boolean>(false);
+  isMobileMenuOpen = signal(false);
+  isUserMenuOpen = signal(false);
+
+  userName = signal('');
+  userEmail = signal('');
+  displayName = computed(() => this.userName() || 'My Account');
+  userInitial = computed(() => this.displayName().charAt(0).toUpperCase());
+
+  constructor() {
+    effect(() => {
+      if (!this.isBrowser) return;
+      document.body.style.overflow = this.isMobileMenuOpen() ? 'hidden' : '';
+    });
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.syncAuth();
+        this.closeMenus();
+      });
+  }
+
+  ngOnInit(): void {
+    this.syncAuth();
+  }
+  private syncAuth(): void {
+    if (!this.isBrowser) return;
+
+    const token = localStorage.getItem('token');
+    const wasLogged = this.isLogged();
+    this.isLogged.set(!!token);
+
+    if (token) {
+      this.readUser();
+      if (!wasLogged) {
+        this.getCartProducts();
+        this.getWishlisttProducts();
+      }
+    } else {
+      this.userName.set('');
+      this.userEmail.set('');
+    }
+  }
+
+  private readUser(): void {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') ?? 'null');
+      this.userName.set(user?.name ?? '');
+      this.userEmail.set(user?.email ?? '');
+    } catch {
+      this.userName.set('');
+      this.userEmail.set('');
+    }
+  }
+
+  signOut(): void {
+    if (this.isBrowser) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    this.cartService.cartCounter.set(0);
+    this.wishlistService.wishlistCounter.set(0);
+    this.syncAuth();
+    this.closeMenus();
+    this.router.navigate(['/login']);
+  }
+  toggleLang(): void {
+    this.myTranslation.changeLanguage(this.isArabic() ? 'en' : 'ar');
+  }
+
+  changeLang(lang: string): void {
+    this.myTranslation.changeLanguage(lang);
+  }
+
+  getCartProducts(): void {
+    this.cartService.getLoggedUserCart().subscribe({
+      next: (response) => {
+        this.cartService.cartCounter.set(response.numOfCartItems);
+      },
+      error: () => {},
+    });
+  }
+
+  getWishlisttProducts(): void {
+    this.wishlistService.getLoggedUserWishlist().subscribe({
+      next: (response) => {
+        this.wishlistService.wishlistCounter.set(response.count);
+      },
+      error: () => {},
+    });
+  }
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update((value) => !value);
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
+  }
+
+  toggleUserMenu() {
+    this.isUserMenuOpen.update((value) => !value);
+  }
+
+  closeMenus() {
+    this.isMobileMenuOpen.set(false);
+    this.isUserMenuOpen.set(false);
+  }
+  closeIfLink(event: Event) {
+    if ((event.target as Element | null)?.closest('a')) this.closeMobileMenu();
+  }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!(event.target as Element | null)?.closest('[data-user-menu]')) {
+      this.isUserMenuOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closeMenus();
+  }
+}
+<header class="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-xl">
+  <div class="container mx-auto px-4">
+    <div class="flex h-16 items-center justify-between gap-4 lg:h-20">
+      
+      <a routerLink="/" class="flex shrink-0 items-center gap-2">
+        @if (themeService.theme() === 'dark') {
+          <img
+            src="assets/imgs/cosmic-logo-dark.svg"
+            alt="COSMIC"
+            class="size-32 object-contain sm:size-40"
+          />
+        } @else {
+          <img
+            src="assets/imgs/cosmic-logo-light.svg"
+            alt="COSMIC"
+            class="size-32 object-contain sm:size-40"
+          />
+        }
+      </a>
+
+      
+      <form class="hidden max-w-xl flex-1 lg:flex">
+        <div class="relative w-full">
+          <input
+            type="search"
+            placeholder="Search products, brands..."
+            class="w-full rounded-full border border-border bg-background py-3 pl-5 pr-12 text-sm text-text outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+          />
+          <button
+            type="submit"
+            aria-label="Search"
+            class="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full cosmic-gradient text-white transition hover:scale-105"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </form>
+
+      
+      <nav class="hidden items-center gap-6 xl:flex">
+        <a routerLink="home" class="text-sm font-semibold text-text transition hover:text-brand"
+          >Home</a
+        >
+        <a routerLink="shop" class="text-sm font-semibold text-muted transition hover:text-brand"
+          >Shop</a
+        >
+
+        <div class="group relative">
+          <button
+            type="button"
+            class="flex items-center gap-2 py-3 text-sm font-semibold text-muted transition hover:text-brand"
+          >
+            Categories
+            <i class="fa-solid fa-chevron-down text-[10px] transition group-hover:rotate-180"></i>
+          </button>
+
+          <div
+            class="invisible absolute left-0 top-full w-52 translate-y-2 rounded-xl border border-border bg-surface p-2 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            <a
+              routerLink="/categories"
+              class="block rounded-lg px-3 py-2.5 text-sm text-text transition hover:bg-brand/10 hover:text-brand"
+              >All Categories</a
+            >
+            <a
+              routerLink="/categories/6439d2d167d9aa4ca970649f"
+              class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+              >Electronics</a
+            >
+            <a
+              routerLink="/categories/6439d5b90049ad0b52b90048"
+              class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+              >Fashion</a
+            >
+            <a
+              routerLink="/categories/6439d30b67d9aa4ca97064b1"
+              class="block rounded-lg px-3 py-2.5 text-sm text-muted transition hover:bg-brand/10 hover:text-brand"
+              >Beauty & Health</a
+            >
+          </div>
+        </div>
+
+        <a routerLink="brands" class="text-sm font-semibold text-muted transition hover:text-brand"
+          >Brands</a
+        >
+      </nav>
+
+      
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        
+        <button
+          type="button"
+          role="switch"
+          [attr.aria-checked]="isArabic()"
+          aria-label="Change language"
+          dir="ltr"
+          (click)="toggleLang()"
+          class="relative hidden h-10 w-[88px] items-center rounded-full border border-border bg-background p-1 text-xs font-bold transition hover:border-brand focus-visible:ring-2 focus-visible:ring-brand sm:flex"
+        >
+          <span
+            class="cosmic-gradient absolute left-1 top-1 h-8 w-10 rounded-full shadow-md shadow-brand/30 transition-transform duration-300"
+            [style.transform]="isArabic() ? 'translateX(100%)' : 'translateX(0)'"
+          ></span>
+          <span
+            class="relative z-10 w-10 text-center transition-colors"
+            [class.text-white]="!isArabic()"
+            [class.text-muted]="isArabic()"
+            >EN</span
+          >
+          <span
+            class="relative z-10 w-10 text-center text-sm transition-colors"
+            [class.text-white]="isArabic()"
+            [class.text-muted]="!isArabic()"
+            >ع</span
+          >
+        </button>
+
+        
+        <button
+          type="button"
+          (click)="themeService.toggleTheme()"
+          class="hidden h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-text transition hover:border-brand hover:text-brand sm:flex"
+          aria-label="Toggle theme"
+        >
+          @if (themeService.theme() === 'dark') {
+            <i class="fa-solid fa-sun text-amber-400"></i>
+          } @else {
+            <i class="fa-solid fa-moon text-brand"></i>
+          }
+        </button>
+
+        
+        <a
+          routerLink="/wishlist"
+          aria-label="Wishlist"
+          class="relative hidden h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-brand/10 hover:text-brand sm:flex"
+        >
+          <i class="fa-regular fa-heart text-lg"></i>
+          <span
+            class="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full cosmic-gradient text-[9px] text-white"
+          >
+            {{ numberOfwishlistItems() }}
+          </span>
+        </a>
+
+        
+        <a
+          routerLink="/cart"
+          aria-label="Shopping cart"
+          class="relative flex h-10 w-10 items-center justify-center rounded-full text-muted transition hover:bg-brand/10 hover:text-brand"
+        >
+          <i class="fa-solid fa-cart-shopping text-lg"></i>
+          <span
+            class="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full cosmic-gradient text-[9px] text-white"
+          >
+            {{ numberOfCartItems() }}
+          </span>
+        </a>
+
+        
+        @if (isLogged()) {
+          <div class="relative" data-user-menu>
+            <button
+              type="button"
+              (click)="toggleUserMenu()"
+              aria-haspopup="menu"
+              [attr.aria-expanded]="isUserMenuOpen()"
+              class="flex h-10 items-center gap-2 rounded-full border border-border bg-background p-1 text-sm font-semibold text-text transition hover:border-brand md:pe-3"
+            >
+              <span
+                class="cosmic-gradient flex size-8 items-center justify-center rounded-full text-sm font-bold text-white"
+              >
+                {{ userInitial() }}
+              </span>
+              <span class="hidden max-w-28 truncate md:block">{{ displayName() }}</span>
+              <i
+                class="fa-solid fa-chevron-down hidden text-[10px] text-muted transition md:block"
+                [class.rotate-180]="isUserMenuOpen()"
+              ></i>
+            </button>
+
+            @if (isUserMenuOpen()) {
+              <div
+                role="menu"
+                class="absolute end-0 top-full z-50 mt-2 w-60 divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface shadow-xl shadow-brand/10"
+              >
+                <div class="px-4 py-3">
+                  <p class="truncate text-sm font-semibold text-text">{{ displayName() }}</p>
+                  @if (userEmail()) {
+                    <p class="truncate text-xs text-muted">{{ userEmail() }}</p>
+                  }
+                </div>
+
+                <ul class="p-2 text-sm">
+                  <li>
+                    <a
+                      role="menuitem"
+                      routerLink="/profile"
+                      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-text transition hover:bg-brand/10 hover:text-brand"
+                    >
+                      <i class="fa-solid fa-user-gear w-4 text-center text-brand"></i>Profile
+                      Settings
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="p-2 text-sm">
+                  <button
+                    role="menuitem"
+                    type="button"
+                    (click)="signOut()"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 font-medium text-rose-700 transition hover:bg-rose-700/10 dark:text-rose-300"
+                  >
+                    <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>Sign out
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <a
+            routerLink="/login"
+            class="hidden items-center gap-2 rounded-full cosmic-gradient px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/20 transition hover:scale-105 lg:flex"
+          >
+            <i class="fa-regular fa-user"></i>
+            Sign In
+          </a>
+        }
+
+        
+        <button
+          type="button"
+          (click)="toggleMobileMenu()"
+          aria-label="Open menu"
+          aria-controls="mobile-menu"
+          [attr.aria-expanded]="isMobileMenuOpen()"
+          class="flex h-10 w-10 items-center justify-center rounded-full cosmic-gradient text-white transition hover:scale-105 xl:hidden"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+
+<div
+  class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-300 xl:hidden"
+  [class]="isMobileMenuOpen() ? 'opacity-100' : 'pointer-events-none opacity-0'"
+  (click)="closeMobileMenu()"
+  aria-hidden="true"
+></div>
+
+
+<aside
+  id="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+  [attr.aria-hidden]="!isMobileMenuOpen()"
+  [attr.inert]="isMobileMenuOpen() ? null : ''"
+  (click)="closeIfLink($event)"
+  class="fixed inset-y-0 start-0 z-[70] flex w-[85%] max-w-sm flex-col overflow-y-auto bg-surface transition-transform duration-300 xl:hidden"
+  [class]="
+    isMobileMenuOpen() ? 'translate-x-0 shadow-2xl' : 'ltr:-translate-x-full rtl:translate-x-full'
+  "
+>
+  
+  <div class="flex items-center justify-between border-b border-border px-5 py-4">
+    <a routerLink="/" aria-label="Cosmic home">
+      @if (themeService.theme() === 'dark') {
+        <img src="assets/imgs/cosmic-logo-dark.svg" alt="COSMIC" class="h-10 w-auto" />
+      } @else {
+        <img src="assets/imgs/cosmic-logo-light.svg" alt="COSMIC" class="h-10 w-auto" />
+      }
+    </a>
+    <button
+      type="button"
+      (click)="closeMobileMenu()"
+      aria-label="Close menu"
+      class="flex size-10 items-center justify-center rounded-full bg-background text-text transition hover:text-brand"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  
+  <form class="border-b border-border px-5 py-4">
+    <div class="relative">
+      <input
+        type="search"
+        placeholder="Search products..."
+        class="w-full rounded-full border border-border bg-background py-3 ps-5 pe-14 text-sm text-text outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+      />
+      <button
+        type="submit"
+        aria-label="Search"
+        class="cosmic-gradient absolute end-1.5 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full text-white"
+      >
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </form>
+
+  
+  <nav class="space-y-1 p-3 text-text">
+    <a
+      routerLink="/"
+      routerLinkActive="bg-brand/10 text-brand"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 rounded-xl px-4 py-3 font-semibold transition hover:bg-brand/10"
+    >
+      <i class="fa-solid fa-house w-5 text-center"></i>Home
+    </a>
+    <a
+      routerLink="/shop"
+      routerLinkActive="bg-brand/10 text-brand"
+      class="flex items-center gap-3 rounded-xl px-4 py-3 font-semibold transition hover:bg-brand/10"
+    >
+      <i class="fa-solid fa-bag-shopping w-5 text-center"></i>Shop
+    </a>
+    <a
+      routerLink="/categories"
+      routerLinkActive="bg-brand/10 text-brand"
+      class="flex items-center gap-3 rounded-xl px-4 py-3 font-semibold transition hover:bg-brand/10"
+    >
+      <i class="fa-solid fa-layer-group w-5 text-center"></i>Categories
+    </a>
+    <a
+      routerLink="/brands"
+      routerLinkActive="bg-brand/10 text-brand"
+      class="flex items-center gap-3 rounded-xl px-4 py-3 font-semibold transition hover:bg-brand/10"
+    >
+      <i class="fa-solid fa-tags w-5 text-center"></i>Brands
+    </a>
+  </nav>
+
+  
+  <div class="space-y-1 border-t border-border p-3 text-text">
+    <a
+      routerLink="/wishlist"
+      class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-semibold transition hover:bg-brand/10"
+    >
+      <span
+        class="flex size-10 items-center justify-center rounded-full bg-brand/10 text-rose-600 dark:text-rose-300"
+      >
+        <i class="fa-regular fa-heart"></i>
+      </span>
+      Wishlist
+      <span
+        class="cosmic-gradient ms-auto min-w-6 rounded-full px-2 py-0.5 text-center text-xs font-bold text-white"
+        >{{ numberOfwishlistItems() }}</span
+      >
+    </a>
+    <a
+      routerLink="/cart"
+      class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-semibold transition hover:bg-brand/10"
+    >
+      <span class="flex size-10 items-center justify-center rounded-full bg-brand/10 text-brand">
+        <i class="fa-solid fa-cart-shopping"></i>
+      </span>
+      Cart
+      <span
+        class="cosmic-gradient ms-auto min-w-6 rounded-full px-2 py-0.5 text-center text-xs font-bold text-white"
+        >{{ numberOfCartItems() }}</span
+      >
+    </a>
+  </div>
+
+  
+  <div class="space-y-1 border-t border-border px-7 py-3">
+    <div class="flex items-center justify-between py-1.5">
+      <span class="text-sm font-medium text-muted">Language</span>
+      <button
+        type="button"
+        role="switch"
+        [attr.aria-checked]="isArabic()"
+        aria-label="Change language"
+        dir="ltr"
+        (click)="toggleLang()"
+        class="relative flex h-10 w-[88px] items-center rounded-full border border-border bg-background p-1 text-xs font-bold"
+      >
+        <span
+          class="cosmic-gradient absolute left-1 top-1 h-8 w-10 rounded-full shadow-md shadow-brand/30 transition-transform duration-300"
+          [style.transform]="isArabic() ? 'translateX(100%)' : 'translateX(0)'"
+        ></span>
+        <span
+          class="relative z-10 w-10 text-center transition-colors"
+          [class.text-white]="!isArabic()"
+          [class.text-muted]="isArabic()"
+          >EN</span
+        >
+        <span
+          class="relative z-10 w-10 text-center text-sm transition-colors"
+          [class.text-white]="isArabic()"
+          [class.text-muted]="!isArabic()"
+          >ع</span
+        >
+      </button>
+    </div>
+
+    <div class="flex items-center justify-between py-1.5">
+      <span class="text-sm font-medium text-muted">Theme</span>
+      <button
+        type="button"
+        (click)="themeService.toggleTheme()"
+        aria-label="Toggle theme"
+        class="flex size-10 items-center justify-center rounded-full border border-border bg-background text-text transition hover:border-brand hover:text-brand"
+      >
+        @if (themeService.theme() === 'dark') {
+          <i class="fa-solid fa-sun text-amber-400"></i>
+        } @else {
+          <i class="fa-solid fa-moon text-brand"></i>
+        }
+      </button>
+    </div>
+  </div>
+
+  
+  <div class="space-y-1 border-t border-border p-3 text-text">
+    @if (isLogged()) {
+      <a
+        routerLink="/profile"
+        class="flex items-center gap-3 rounded-xl px-4 py-2.5 transition hover:bg-brand/10"
+      >
+        <span
+          class="cosmic-gradient flex size-10 items-center justify-center rounded-full font-bold text-white"
+          >{{ userInitial() }}</span
+        >
+        <span class="min-w-0">
+          <span class="block truncate font-semibold">{{ displayName() }}</span>
+          @if (userEmail()) {
+            <span class="block truncate text-xs text-muted">{{ userEmail() }}</span>
+          }
+        </span>
+      </a>
+      <button
+        type="button"
+        (click)="signOut()"
+        class="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 font-semibold text-rose-700 transition hover:bg-rose-700/10 dark:text-rose-300"
+      >
+        <span class="flex size-10 items-center justify-center rounded-full bg-rose-700/10">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </span>
+        Sign Out
+      </button>
+    } @else {
+      <a
+        routerLink="/login"
+        class="cosmic-gradient flex items-center justify-center gap-2 rounded-xl px-4 py-3 font-bold text-white shadow-lg shadow-brand/25"
+      >
+        <i class="fa-regular fa-user"></i>Sign In
+      </a>
+      <a
+        routerLink="/register"
+        class="block px-4 py-2 text-center text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300"
+      >
+        Create an account
+      </a>
+    }
+  </div>
+
+  
+  <div class="mt-auto p-5">
+    <div class="flex items-center gap-3 rounded-xl border border-border bg-background p-4">
+      <span
+        class="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+      >
+        <i class="fa-solid fa-headset"></i>
+      </span>
+      <div>
+        <p class="text-sm font-bold text-text">Need Help?</p>
+        <a href="#" class="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300"
+          >Contact Support</a
+        >
+      </div>
+    </div>
+  </div>
+</aside>
