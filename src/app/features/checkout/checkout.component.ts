@@ -2,13 +2,14 @@ import { Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal } from '
 
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 import { CheckoutService } from '../../core/services/checkout/checkout.service';
 import { CartService } from '../../core/services/cart/cart.service';
 import { ICart } from '../../core/models/icart.interface';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 interface IShippingAddress {
   _id: string;
@@ -39,6 +40,9 @@ export class CheckoutComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly toastr = inject(ToastrService);
+  private readonly translate = inject(TranslateService);
 
   cartData: WritableSignal<ICart> = signal({
     _id: '',
@@ -151,7 +155,13 @@ export class CheckoutComponent implements OnInit {
 
     if (this.paymentMethod() === 'cash') {
       this.checkoutService.createCashOrder(this.cartId(), payload).subscribe({
-        next: (response) => {},
+        next: () => {
+          this.toastr.success(
+            this.translate.instant('checkout.cashOrderSuccess'),
+            this.translate.instant('checkout.orderPlaced'),
+          );
+          void this.router.navigate(['/cart']);
+        },
         error: (error) => {},
       });
     } else {

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,8 +13,11 @@ export class CheckoutService {
     return this.httpClient.post(`${environment.baseUrl}api/v1/orders/${cartId}`, data);
   }
   checkoutVisa(cartId: string, data: any): Observable<any> {
+    const returnUrl = window.location.origin;
+    const params = new URLSearchParams({ url: returnUrl });
+
     return this.httpClient.post(
-      `${environment.baseUrl}api/v1/orders/checkout-session/${cartId}?url=${environment.url}:`,
+      `${environment.baseUrl}api/v1/orders/checkout-session/${cartId}?${params.toString()}`,
       data,
     );
   }

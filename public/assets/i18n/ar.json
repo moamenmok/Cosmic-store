@@ -177,6 +177,8 @@
     "payOnline": "الدفع عبر الإنترنت",
     "securePayment": "ادفع بأمان باستخدام بطاقة الائتمان أو الخصم",
     "secureCheckout": "دفع آمن",
+    "orderPlaced": "تم تأكيد الطلب",
+    "cashOrderSuccess": "تم تقديم طلب الدفع عند الاستلام بنجاح.",
     "placeOrder": "تأكيد الطلب",
     "fastDelivery": "توصيل سريع",
     "easyReturns": "إرجاع سهل",

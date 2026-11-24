@@ -177,6 +177,8 @@
     "payOnline": "Pay online",
     "securePayment": "Secure payment using your credit or debit card",
     "secureCheckout": "Secure checkout",
+    "orderPlaced": "Order placed",
+    "cashOrderSuccess": "Your cash order was placed successfully.",
     "placeOrder": "Place order",
     "fastDelivery": "Fast delivery",
     "easyReturns": "Easy returns",
